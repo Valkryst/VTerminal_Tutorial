@@ -36,6 +36,27 @@ public class Map extends Layer {
         }
     }
 
+    /** Updates the Map's Layer, so that any changes made to the Map's tiles are displayed on the Layer. */
+    public void updateLayerTiles() {
+        for (int y = 0 ; y < getViewHeight() ; y++) {
+            for (int x = 0 ; x < getViewWidth() ; x++) {
+                final MapTile mapTile = mapTiles[y][x];
+                final Sprite mapTileSprite = mapTile.getSprite();
+
+                final Tile layerTile = super.tiles.getTileAt(x, y);
+                layerTile.setCharacter(mapTileSprite.getCharacter());
+
+                if (mapTile.isVisible()) {
+                    layerTile.setBackgroundColor(mapTileSprite.getBackgroundColor());
+                    layerTile.setForegroundColor(mapTileSprite.getForegroundColor());
+                } else {
+                    layerTile.setBackgroundColor(mapTileSprite.getDarkBackgroundColor());
+                    layerTile.setForegroundColor(mapTileSprite.getDarkForegroundColor());
+                }
+            }
+        }
+    }
+
     /**
      * Retrieves the width of the map.
      *
