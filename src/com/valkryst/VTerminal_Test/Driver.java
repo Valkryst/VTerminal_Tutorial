@@ -1,7 +1,9 @@
 package com.valkryst.VTerminal_Test;
 
 import com.valkryst.VTerminal.Screen;
+import com.valkryst.VTerminal.Tile;
 
+import java.awt.*;
 import java.io.IOException;
 
 public class Driver {
@@ -21,6 +23,13 @@ public class Driver {
         screen.getTileAt(9, 0).setCharacter('l');
         screen.getTileAt(10, 0).setCharacter('d');
         screen.getTileAt(11, 0).setCharacter('!');
+
+        final Tile[] helloTiles = screen.getTiles().getRowSubset(0, 0, 12);
+
+        for (final Tile tile : helloTiles) {
+            tile.setBackgroundColor(Color.BLACK);
+            tile.setForegroundColor(Color.WHITE);
+        }
 
         screen.draw();
     }
