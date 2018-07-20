@@ -34,6 +34,8 @@ public class Map extends Layer {
                 mapTiles[y][x] = new MapTile();
             }
         }
+
+        this.updateLayerTiles();
     }
 
     /** Updates the Map's Layer, so that any changes made to the Map's tiles are displayed on the Layer. */
