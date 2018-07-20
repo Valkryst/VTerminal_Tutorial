@@ -1,4 +1,4 @@
-package com.valkryst.VTerminal_Test;
+package com.valkryst.VTerminal_Tutorial;
 
 import com.valkryst.VTerminal.Screen;
 import com.valkryst.VTerminal.Tile;
