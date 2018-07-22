@@ -2,13 +2,19 @@ package com.valkryst.VTerminal_Tutorial;
 
 import com.valkryst.VTerminal.Tile;
 import com.valkryst.VTerminal.component.Layer;
+import com.valkryst.VTerminal_Tutorial.entity.Entity;
 import lombok.Getter;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Map extends Layer {
-    /** The mapTiles. */
+    /** The map tiles. */
     @Getter private MapTile[][] mapTiles;
+
+    /** The entities. */
+    @Getter private List<Entity> entities = new ArrayList<>();
 
     /** Constructs a new Map. */
     public Map() {
@@ -57,6 +63,46 @@ public class Map extends Layer {
                 }
             }
         }
+    }
+
+    /**
+     * Determines if a position on the map is free.
+     *
+     * A position is free if there is no entity at the position and if the tile at the position is not solid.
+     *
+     * @param position
+     *        The position.
+     *
+     * @return
+     *        Whether the position is free.
+     */
+    public boolean isPositionFree(final Point position) {
+        if (position == null) {
+            return false;
+        }
+
+        // Ensure position isn't outside the bounds of the map.
+        if (position.x < 0 || position.y < 0) {
+            return false;
+        }
+
+        if (position.x >= getMapWidth() || position.y >= getMapHeight()) {
+            return false;
+        }
+
+        // Check for entities at the position.
+        for (final Entity entity : entities) {
+            if (entity.getPosition().equals(position)) {
+                return false;
+            }
+        }
+
+        // Check if the tile at the position is solid.
+        if (mapTiles[position.y][position.x].isSolid()) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
