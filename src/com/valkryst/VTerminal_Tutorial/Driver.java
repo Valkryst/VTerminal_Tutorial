@@ -22,6 +22,8 @@ public class Driver {
         final Room room = new Room(position, dimensions);
         room.carve(map);
 
+        screen.draw();
+
         final Player player = new Player(new Point(12, 12), "Gygax");
         map.addComponent(player);
 
