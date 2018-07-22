@@ -59,10 +59,10 @@ public class Entity extends Layer {
      * Moves the entity to a new position, relative to it's current position.
      *
      * @param dx
-     *        The change in x-axis position.
+     *          The change in x-axis position.
      *
      * @param dy
-     *        The change in y-axis position.
+     *          The change in y-axis position.
      */
     public void move(final int dx, final int dy) {
         final int newX = dx + super.getTiles().getXPosition();
