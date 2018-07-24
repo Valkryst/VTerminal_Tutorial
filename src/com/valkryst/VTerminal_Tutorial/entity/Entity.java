@@ -3,10 +3,15 @@ package com.valkryst.VTerminal_Tutorial.entity;
 import com.valkryst.VTerminal.Tile;
 import com.valkryst.VTerminal.component.Layer;
 import com.valkryst.VTerminal_Tutorial.Sprite;
+import com.valkryst.VTerminal_Tutorial.action.Action;
+import com.valkryst.VTerminal_Tutorial.action.MoveAction;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 
 import java.awt.*;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class Entity extends Layer {
     /** The sprite. */
@@ -14,6 +19,9 @@ public class Entity extends Layer {
 
     /** The name of the entity. */
     @Getter @Setter private String name;
+
+    /** The actions to perform. */
+    private final Queue<Action> actions = new ConcurrentLinkedQueue<>();
 
     /**
      * Constructs a new Entity.
@@ -56,7 +64,21 @@ public class Entity extends Layer {
     }
 
     /**
-     * Moves the entity to a new position, relative to it's current position.
+     * Adds an action to the entity.
+     *
+     * @param action
+     *        The action.
+     */
+    public void addAction(final @NonNull Action action) {
+        if (action == null) {
+            return;
+        }
+
+        actions.add(action);
+    }
+
+    /**
+     * Adds a move action to the entity, to move it to a new position relative to it's current position.
      *
      * @param dx
      *          The change in x-axis position.
@@ -65,11 +87,7 @@ public class Entity extends Layer {
      *          The change in y-axis position.
      */
     public void move(final int dx, final int dy) {
-        final int newX = dx + super.getTiles().getXPosition();
-        final int newY = dy + super.getTiles().getYPosition();
-
-        super.getTiles().setXPosition(newX);
-        super.getTiles().setYPosition(newY);
+        actions.add(new MoveAction(this.getPosition(), dx, dy));
     }
 
     /**
@@ -114,7 +132,10 @@ public class Entity extends Layer {
             return;
         }
 
-        super.getTiles().setXPosition(position.x);
-        super.getTiles().setYPosition(position.y);
+        final Point currentPosition = this.getPosition();
+        final int xDifference = position.x - currentPosition.x;
+        final int yDifference = position.y - currentPosition.y;
+
+        actions.add(new MoveAction(currentPosition, xDifference, yDifference));
     }
 }
