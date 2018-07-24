@@ -120,7 +120,7 @@ public class Entity extends Layer {
     }
 
     /**
-     * Moves the entity to a new position.
+     * Adds a move action to the entity, to move it to a new position.
      *
      * Ignores null and negative positions.
      *
