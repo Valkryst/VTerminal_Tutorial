@@ -69,7 +69,7 @@ public class Entity extends Layer {
      * @param action
      *        The action.
      */
-    public void addAction(final @NonNull Action action) {
+    public void addAction(final Action action) {
         if (action == null) {
             return;
         }
