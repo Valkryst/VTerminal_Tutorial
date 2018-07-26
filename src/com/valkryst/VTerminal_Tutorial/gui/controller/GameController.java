@@ -1,13 +1,11 @@
 package com.valkryst.VTerminal_Tutorial.gui.controller;
 
 import com.valkryst.VTerminal.Screen;
-import com.valkryst.VTerminal_Tutorial.Room;
 import com.valkryst.VTerminal_Tutorial.entity.Player;
 import com.valkryst.VTerminal_Tutorial.gui.model.GameModel;
 import com.valkryst.VTerminal_Tutorial.gui.view.GameView;
 import lombok.NonNull;
 
-import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
