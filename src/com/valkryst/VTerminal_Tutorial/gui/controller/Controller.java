@@ -6,6 +6,8 @@ import com.valkryst.VTerminal_Tutorial.gui.view.View;
 import lombok.Getter;
 import lombok.NonNull;
 
+import java.util.EventListener;
+
 public class Controller<V extends View, M extends Model> {
     /** The view. */
     @Getter protected final V view;
@@ -31,24 +33,50 @@ public class Controller<V extends View, M extends Model> {
     }
 
     /**
-     * Adds a view to a screen after removing any existing views or components from the screen.
+     * Removes all components from a screen, then adds the view to the screen.
      *
      * @param screen
-     *          The screen on which the view is displayed.
-     *
-     * @param controller
-     *          The controller of the view to add to the screen.
+     *          The screen.
      */
-    public static void swapViews(final Screen screen, final Controller controller) {
-        if (screen == null || controller == null) {
+    public void addViewToScreen(final Screen screen) {
+        if (screen == null) {
             return;
         }
 
-        // Remove existing views and components.
         screen.removeAllComponents();
+        screen.addComponent(view);
+        addEventListenersTo(screen);
+    }
 
-        // Add the new view and any event listeners it requires.
-        screen.addComponent(controller.getView());
-        controller.getModel().getEventListeners().forEach(screen::addListener);
+    /**
+     * Adds all of the event listeners to a screen.
+     *
+     * @param screen
+     *          The screen.
+     */
+    public void addEventListenersTo(final Screen screen) {
+        if (screen == null) {
+            return;
+        }
+
+        for (final EventListener listener : model.getEventListeners()) {
+            screen.addListener(listener);
+        }
+    }
+
+    /**
+     * Removes all of the event listeners from a screen.
+     *
+     * @param screen
+     *          The screen.
+     */
+    public void removeEventListenersFrom(final Screen screen) {
+        if (screen == null) {
+            return;
+        }
+
+        for (final EventListener listener : model.getEventListeners()) {
+            screen.removeListener(listener);
+        }
     }
 }
