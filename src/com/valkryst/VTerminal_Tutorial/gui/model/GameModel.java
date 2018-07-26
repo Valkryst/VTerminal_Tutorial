@@ -35,6 +35,9 @@ public class GameModel extends Model {
 
         // Add Map & Player to Screen
         screen.addComponent(map);
+        screen.draw();
+
         screen.addComponent(player);
+        screen.draw();
     }
 }
