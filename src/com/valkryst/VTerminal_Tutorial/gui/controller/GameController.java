@@ -8,6 +8,8 @@ import com.valkryst.VTerminal_Tutorial.gui.view.GameView;
 import lombok.NonNull;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 public class GameController extends Controller<GameView, GameModel> {
     /**
@@ -20,7 +22,7 @@ public class GameController extends Controller<GameView, GameModel> {
      *          If the screen is null.
      */
     public GameController(final @NonNull Screen screen) {
-        super(new GameView(screen), new GameModel());
+        super(new GameView(screen), new GameModel(screen));
     }
 
     /**
@@ -30,22 +32,48 @@ public class GameController extends Controller<GameView, GameModel> {
      *          The screen on which the view is displayed.
      */
     public void initializeEventHandlers(final Screen screen) {
-    }
+        final Player player = super.model.getPlayer();
 
-    // Test Code
-    public void test(final Screen screen) {
-        screen.addComponent(super.model.getMap());
+        final KeyListener keyListener = new KeyListener() {
+            @Override
+            public void keyTyped(final KeyEvent e) {
+            }
 
-        final Point position = new Point(10, 10);
-        final Dimension dimensions = new Dimension(10, 5);
-        final Room room = new Room(position, dimensions);
-        room.carve(super.model.getMap());
+            @Override
+            public void keyPressed(final KeyEvent e) {
+            }
 
-        screen.draw();
+            @Override
+            public void keyReleased(final KeyEvent e) {
+                switch (e.getKeyCode()) {
+                    case KeyEvent.VK_W:
+                    case KeyEvent.VK_UP: {
+                        player.move(0, -1);
+                        break;
+                    }
 
-        final Player player = new Player(new Point(12, 12), "Gygax");
-        super.model.getMap().addComponent(player);
+                    case KeyEvent.VK_S:
+                    case KeyEvent.VK_DOWN: {
+                        player.move(0, 1);
+                        break;
+                    }
 
-        screen.draw();
+                    case KeyEvent.VK_A:
+                    case KeyEvent.VK_LEFT: {
+                        player.move(-1, 0);
+                        break;
+                    }
+
+                    case KeyEvent.VK_D:
+                    case KeyEvent.VK_RIGHT: {
+                        player.move(1, 0);
+                        break;
+                    }
+                }
+            }
+        };
+
+        screen.addListener(keyListener);
+        super.getModel().getEventListeners().add(keyListener);
     }
 }
