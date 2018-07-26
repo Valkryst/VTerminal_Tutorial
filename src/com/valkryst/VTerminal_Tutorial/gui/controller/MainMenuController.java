@@ -30,7 +30,9 @@ public class MainMenuController extends Controller<MainMenuView, MainMenuModel> 
      */
     public void initializeEventHandlers(final Screen screen) {
         super.view.getButton_new().setOnClickFunction(() -> {
-            Controller.swapViews(screen, new GameController(screen));
+            final GameController controller = new GameController(screen);
+            Controller.swapViews(screen, controller);
+            controller.test(screen);
         });
 
         super.view.getButton_exit().setOnClickFunction(() -> {
