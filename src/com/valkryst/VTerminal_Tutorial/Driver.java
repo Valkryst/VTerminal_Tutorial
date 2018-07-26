@@ -3,7 +3,6 @@ package com.valkryst.VTerminal_Tutorial;
 import com.valkryst.VTerminal.Screen;
 import com.valkryst.VTerminal.font.Font;
 import com.valkryst.VTerminal.font.FontLoader;
-import com.valkryst.VTerminal_Tutorial.gui.controller.Controller;
 import com.valkryst.VTerminal_Tutorial.gui.controller.MainMenuController;
 
 import java.io.IOException;
@@ -14,6 +13,8 @@ public class Driver {
         final Screen screen = new Screen(80, 40, font);
         screen.addCanvasToFrame();
 
-        Controller.swapViews(screen, new MainMenuController(screen));
+        final MainMenuController controller = new MainMenuController(screen);
+        controller.addViewToScreen(screen);
+        controller.addEventListenersTo(screen);
     }
 }
