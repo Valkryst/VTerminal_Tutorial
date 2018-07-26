@@ -7,6 +7,6 @@ import java.util.EventListener;
 import java.util.List;
 
 public class Model {
-    /** The listeners of the view. */
+    /** All listeners that are not a part of the view's components. */
     @Getter protected final List<EventListener> eventListeners = new ArrayList<>(0);
 }
