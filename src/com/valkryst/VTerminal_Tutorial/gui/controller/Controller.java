@@ -33,31 +33,17 @@ public class Controller<V extends View, M extends Model> {
     }
 
     /**
-     * Removes all components from a screen, then adds the view to the screen.
+     * Adds the view to a screen after removing all other components from the screen.
      *
      * @param screen
-     *          The screen.
+     *          The screen on which the view is displayed.
      */
-    public void addViewToScreen(final Screen screen) {
+    public void addToScreen(final Screen screen) {
         if (screen == null) {
             return;
         }
 
-        screen.removeAllComponents();
         screen.addComponent(view);
-        addEventListenersTo(screen);
-    }
-
-    /**
-     * Adds all of the event listeners to a screen.
-     *
-     * @param screen
-     *          The screen.
-     */
-    public void addEventListenersTo(final Screen screen) {
-        if (screen == null) {
-            return;
-        }
 
         for (final EventListener listener : model.getEventListeners()) {
             screen.addListener(listener);
@@ -65,15 +51,17 @@ public class Controller<V extends View, M extends Model> {
     }
 
     /**
-     * Removes all of the event listeners from a screen.
+     * Removes the view from a screen.
      *
      * @param screen
-     *          The screen.
+     *          The screen on which the view is displayed.
      */
-    public void removeEventListenersFrom(final Screen screen) {
+    public void removeFromScreen(final Screen screen) {
         if (screen == null) {
             return;
         }
+
+        screen.removeComponent(view);
 
         for (final EventListener listener : model.getEventListeners()) {
             screen.removeListener(listener);
