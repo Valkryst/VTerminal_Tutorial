@@ -14,7 +14,6 @@ public class Driver {
         screen.addCanvasToFrame();
 
         final MainMenuController controller = new MainMenuController(screen);
-        controller.addViewToScreen(screen);
-        controller.addEventListenersTo(screen);
+        controller.addToScreen(screen);
     }
 }
