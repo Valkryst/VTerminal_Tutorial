@@ -2,6 +2,7 @@ package com.valkryst.VTerminal_Tutorial.entity;
 
 import com.valkryst.VTerminal.Tile;
 import com.valkryst.VTerminal.component.Layer;
+import com.valkryst.VTerminal_Tutorial.Map;
 import com.valkryst.VTerminal_Tutorial.Sprite;
 import com.valkryst.VTerminal_Tutorial.action.Action;
 import com.valkryst.VTerminal_Tutorial.action.MoveAction;
@@ -60,6 +61,20 @@ public class Entity extends Layer {
         } else {
             this.name = name;
         }
+    }
+
+    /**
+     * Performs all of the entity's actions.
+     *
+     * @param map
+     *          The map on which the entity exists.
+     */
+    public void performActions(final Map map) {
+        for (final Action action : actions) {
+            action.perform(map, this);
+        }
+
+        actions.clear();
     }
 
     /**
