@@ -30,9 +30,12 @@ public class MainMenuController extends Controller<MainMenuView, MainMenuModel> 
      */
     public void initializeEventHandlers(final Screen screen) {
         super.view.getButton_new().setOnClickFunction(() -> {
+            // Remove this view from the screen.
+            super.removeFromScreen(screen);
+
+            // Add the new view to the screen.
             final GameController controller = new GameController(screen);
-            Controller.swapViews(screen, controller);
-            controller.test(screen);
+            controller.addToScreen(screen);
         });
 
         super.view.getButton_exit().setOnClickFunction(() -> {
