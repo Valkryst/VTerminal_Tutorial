@@ -37,7 +37,7 @@ public class MoveAction extends Action {
 
         if (map.isPositionFree(newPosition)) {
             super.perform(map, entity);
-            entity.setPosition(newPosition);
+            entity.getTiles().setPosition(newPosition);
         }
     }
 }
