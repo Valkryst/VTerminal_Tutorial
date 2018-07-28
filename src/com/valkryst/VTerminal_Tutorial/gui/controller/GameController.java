@@ -46,7 +46,7 @@ public class GameController extends Controller<GameView, GameModel> {
         tempTimer.start();
 
         // Create and start the game-loop timer.
-        timer = new Timer(100, e -> {
+        timer = new Timer(16, e -> {
             final Map map = super.model.getMap();
 
             for (final Entity entity : map.getEntities()) {
