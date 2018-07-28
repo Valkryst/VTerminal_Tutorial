@@ -34,12 +34,12 @@ public class GameController extends Controller<GameView, GameModel> {
          * Add the Map & Player to the View.
          *
          * Because of a quirk in VTerminal's rendering, we need to add the player after the map is first
-         * rendered, so that the map appears below the player. We use 101ms as the delay, because the first
-         * render (see the game-loop timer below) occurs after 100ms.
+         * rendered, so that the map appears below the player. We use 1ms as the delay, because the first
+         * render (see the game-loop timer below) occurs right away.
          */
         view.addComponent(model.getMap());
 
-        final Timer tempTimer = new Timer(101, e-> {
+        final Timer tempTimer = new Timer(1, e-> {
             view.addComponent(model.getPlayer());
         });
         tempTimer.setRepeats(false);
@@ -55,6 +55,7 @@ public class GameController extends Controller<GameView, GameModel> {
 
             screen.draw();
         });
+        timer.setInitialDelay(0);
         timer.start();
     }
 
