@@ -32,12 +32,5 @@ public class GameModel extends Model {
         // Create Player
         player = new Player(new Point(12, 12), "Gygax");
         map.getEntities().add(player);
-
-        // Add Map & Player to Screen
-        screen.addComponent(map);
-        screen.draw();
-
-        screen.addComponent(player);
-        screen.draw();
     }
 }

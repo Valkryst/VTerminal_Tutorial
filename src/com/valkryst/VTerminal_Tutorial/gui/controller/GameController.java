@@ -1,6 +1,8 @@
 package com.valkryst.VTerminal_Tutorial.gui.controller;
 
 import com.valkryst.VTerminal.Screen;
+import com.valkryst.VTerminal_Tutorial.Map;
+import com.valkryst.VTerminal_Tutorial.entity.Entity;
 import com.valkryst.VTerminal_Tutorial.entity.Player;
 import com.valkryst.VTerminal_Tutorial.gui.model.GameModel;
 import com.valkryst.VTerminal_Tutorial.gui.view.GameView;
@@ -26,20 +28,38 @@ public class GameController extends Controller<GameView, GameModel> {
      */
     public GameController(final @NonNull Screen screen) {
         super(new GameView(screen), new GameModel(screen));
-        initializeEventHandlers(screen);
+        initializeEventHandlers();
 
-        timer = new Timer(200, e -> {
+        /*
+         * Add the Map & Player to the View.
+         *
+         * Because of a quirk in VTerminal's rendering, we need to add the player after the map is first
+         * rendered, so that the map appears below the player. We use 101ms as the delay, because the first
+         * render (see the game-loop timer below) occurs after 100ms.
+         */
+        view.addComponent(model.getMap());
+
+        final Timer tempTimer = new Timer(101, e-> {
+            view.addComponent(model.getPlayer());
+        });
+        tempTimer.setRepeats(false);
+        tempTimer.start();
+
+        // Create and start the game-loop timer.
+        timer = new Timer(100, e -> {
+            final Map map = super.model.getMap();
+
+            for (final Entity entity : map.getEntities()) {
+                entity.performActions(map);
+            }
+
             screen.draw();
         });
+        timer.start();
     }
 
-    /**
-     * Creates any event handlers required by the view.
-     *
-     * @param screen
-     *          The screen on which the view is displayed.
-     */
-    private void initializeEventHandlers(final Screen screen) {
+    /** Creates any event handlers required by the view. */
+    private void initializeEventHandlers() {
         final Player player = super.model.getPlayer();
 
         final KeyListener keyListener = new KeyListener() {
@@ -81,7 +101,6 @@ public class GameController extends Controller<GameView, GameModel> {
             }
         };
 
-        screen.addListener(keyListener);
         super.getModel().getEventListeners().add(keyListener);
     }
 }
