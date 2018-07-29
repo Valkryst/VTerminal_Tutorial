@@ -14,7 +14,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class GameController extends Controller<GameView, GameModel> {
-    /** The timer which acts as an extremely basic game loop. */
+    /** The timer which runs the game loop. */
     @Getter private final Timer timer;
 
     /**
