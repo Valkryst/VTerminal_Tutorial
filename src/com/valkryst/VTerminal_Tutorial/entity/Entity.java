@@ -72,6 +72,10 @@ public class Entity extends Layer {
         final BoundStat health = new BoundStat("Health", 0, 00);
         final BoundStat level = new BoundStat("Level", 0, 60);
         final BoundStat experience = new BoundStat("Experience", 0, 100);
+
+        addStat(health);
+        addStat(level);
+        addStat(experience);
     }
 
     /**
