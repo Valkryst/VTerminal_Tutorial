@@ -10,7 +10,7 @@ public class Stat {
     @Getter private final String name;
 
     /** The value. */
-    @Getter private short value;
+    @Getter private int value;
 
     /** The runnable functions to run whenever the value is changed. */
     @Getter private final List<Runnable> runnables = new ArrayList<>();
@@ -24,7 +24,7 @@ public class Stat {
      * @param value
      *        The value.
      */
-    public Stat(String name, final short value) {
+    public Stat(String name, final int value) {
         if (name.isEmpty()) {
             name = "Undefined";
         }
@@ -39,7 +39,7 @@ public class Stat {
      * @param value
      *        The new value.
      */
-    public void setValue(final short value) {
+    public void setValue(final int value) {
         this.value = value;
 
         for (final Runnable runnable : runnables) {

@@ -4,10 +4,10 @@ import lombok.Getter;
 
 public class BoundStat extends Stat {
     /** The minimum value. */
-    @Getter private short minValue;
+    @Getter private int minValue;
 
     /** The maximum value. */
-    @Getter private short maxValue;
+    @Getter private int maxValue;
 
     /**
      * Constructs a new BoundStat.
@@ -26,7 +26,7 @@ public class BoundStat extends Stat {
      * @param maxValue
      *        The maximum value.
      */
-    public BoundStat(final String name, final short value, final short minValue, short maxValue) {
+    public BoundStat(final String name, final int value, final int minValue, int maxValue) {
         super(name, value);
 
         if (maxValue < minValue) {
@@ -53,12 +53,12 @@ public class BoundStat extends Stat {
      * @param maxValue
      *        The maximum value.
      */
-    public BoundStat(final String name, final short minValue, final short maxValue) {
+    public BoundStat(final String name, final int minValue, final int maxValue) {
         this(name, maxValue, minValue, maxValue);
     }
 
     @Override
-    public void setValue(final short value) {
+    public void setValue(final int value) {
         if (super.getValue() > maxValue) {
             super.setValue(maxValue);
             return;
@@ -82,7 +82,7 @@ public class BoundStat extends Stat {
      * @param minValue
      *          The new min value.
      */
-    public void setMinValue(final short minValue) {
+    public void setMinValue(final int minValue) {
        if (minValue < maxValue) {
            this.minValue = minValue;
 
@@ -102,7 +102,7 @@ public class BoundStat extends Stat {
      * @param maxValue
      *          The new max value.
      */
-    public void setMaxValue(final short maxValue) {
+    public void setMaxValue(final int maxValue) {
         if (maxValue > minValue) {
             this.maxValue = maxValue;
 
