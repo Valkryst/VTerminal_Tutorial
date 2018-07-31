@@ -6,10 +6,13 @@ import com.valkryst.VTerminal_Tutorial.Map;
 import com.valkryst.VTerminal_Tutorial.Sprite;
 import com.valkryst.VTerminal_Tutorial.action.Action;
 import com.valkryst.VTerminal_Tutorial.action.MoveAction;
+import com.valkryst.VTerminal_Tutorial.statistic.BoundStat;
+import com.valkryst.VTerminal_Tutorial.statistic.Stat;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.awt.*;
+import java.util.HashMap;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -17,8 +20,11 @@ public class Entity extends Layer {
     /** The sprite. */
     @Getter private Sprite sprite;
 
-    /** The name of the entity. */
+    /** The name. */
     @Getter @Setter private String name;
+
+    /** The stats. */
+    private final HashMap<String, Stat> stats = new HashMap<>();
 
     /** The actions to perform. */
     private final Queue<Action> actions = new ConcurrentLinkedQueue<>();
@@ -61,6 +67,11 @@ public class Entity extends Layer {
         } else {
             this.name = name;
         }
+
+        // Set Core Stats
+        final BoundStat health = new BoundStat("Health", 0, 00);
+        final BoundStat level = new BoundStat("Level", 0, 60);
+        final BoundStat experience = new BoundStat("Experience", 0, 100);
     }
 
     /**
@@ -89,6 +100,34 @@ public class Entity extends Layer {
         }
 
         actions.add(action);
+    }
+
+    /**
+     * Adds a stat to the entity.
+     *
+     * @param stat
+     *          The stat.
+     */
+    public void addStat(final Stat stat) {
+        if (stat == null) {
+            return;
+        }
+
+        stats.putIfAbsent(stat.getName().toLowerCase(), stat);
+    }
+
+    /**
+     * Removes a stat, by name, from the entity.
+     *
+     * @param name
+     *          The name of the stat.
+     */
+    public void removeStat(final String name) {
+        if (name == null) {
+            return;
+        }
+
+        stats.remove(name.toLowerCase());
     }
 
     /**
@@ -151,5 +190,24 @@ public class Entity extends Layer {
         final int yDifference = position.y - currentPosition.y;
 
         actions.add(new MoveAction(currentPosition, xDifference, yDifference));
+    }
+
+    /**
+     * Retrieves a stat, by name, from the entity.
+     *
+     * @param name
+     *          The name of the stat.
+     *
+     * @return
+     *          The stat.
+     *          If the name is null, then null is returned.
+     *          If the entity has no stat that uses the specified name, then null is returned.
+     */
+    public Stat getStat(final String name) {
+        if (name == null) {
+            return null;
+        }
+
+        return stats.get(name.toLowerCase());
     }
 }
