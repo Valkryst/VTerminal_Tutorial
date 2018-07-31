@@ -70,8 +70,8 @@ public class Entity extends Layer {
 
         // Set Core Stats
         final BoundStat health = new BoundStat("Health", 0, 00);
-        final BoundStat level = new BoundStat("Level", 0, 60);
-        final BoundStat experience = new BoundStat("Experience", 0, 100);
+        final BoundStat level = new BoundStat("Level", 1, 1, 60);
+        final BoundStat experience = new BoundStat("Experience", 0, 0, 100);
 
         addStat(health);
         addStat(level);
