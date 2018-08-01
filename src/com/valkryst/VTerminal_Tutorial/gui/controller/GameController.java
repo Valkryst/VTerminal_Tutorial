@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.NonNull;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -37,10 +38,14 @@ public class GameController extends Controller<GameView, GameModel> {
          * rendered, so that the map appears below the player. We use 1ms as the delay, because the first
          * render (see the game-loop timer below) occurs right away.
          */
-        view.addComponent(model.getMap());
+        view.addComponent(super.model.getMap());
 
         final Timer tempTimer = new Timer(1, e-> {
-            view.addComponent(model.getPlayer());
+            final Player player = super.model.getPlayer();
+            final Map map = super.model.getMap();
+
+            view.addComponent(player);
+            player.getLineOfSight().showLOSOnMap(map);
         });
         tempTimer.setRepeats(false);
         tempTimer.start();
