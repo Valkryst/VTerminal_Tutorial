@@ -1,16 +1,22 @@
 package com.valkryst.VTerminal_Tutorial.action;
 
+import com.valkryst.VTerminal_Tutorial.LineOfSight;
 import com.valkryst.VTerminal_Tutorial.Map;
 import com.valkryst.VTerminal_Tutorial.entity.Entity;
+import com.valkryst.VTerminal_Tutorial.entity.Player;
 
 import java.awt.*;
 
 public class MoveAction extends Action {
     /** The original position of the entity being moved. */
     private final Point originalPosition;
-
     /** The position being moved to. */
     private final Point newPosition;
+
+    /** The change applied to the original x-axis position. */
+    private final int dx;
+    /** The change applied to the original y-axis position. */
+    private final int dy;
 
     /**
      * Constructs a new MoveAction.
@@ -27,6 +33,8 @@ public class MoveAction extends Action {
     public MoveAction(final Point position, final int dx, final int dy) {
         originalPosition = position;
         newPosition = new Point(dx + position.x, dy + position.y);
+        this.dx = dx;
+        this.dy = dy;
     }
 
     @Override
@@ -38,6 +46,15 @@ public class MoveAction extends Action {
         if (map.isPositionFree(newPosition)) {
             super.perform(map, entity);
             entity.getTiles().setPosition(newPosition);
+
+            if (entity instanceof Player) {
+                final LineOfSight los = entity.getLineOfSight();
+                los.hideLOSOnMap(map);
+                los.move(dx, dy);
+                los.showLOSOnMap(map);
+            } else {
+                entity.getLineOfSight().move(dx, dy);
+            }
         }
     }
 }
