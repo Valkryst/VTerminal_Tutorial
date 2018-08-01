@@ -53,6 +53,8 @@ public class GameController extends Controller<GameView, GameModel> {
                 entity.performActions(map);
             }
 
+            map.updateLayerTiles();
+
             screen.draw();
         });
         timer.setInitialDelay(0);
