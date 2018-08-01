@@ -88,14 +88,13 @@ public class LineOfSight {
         for (final List<Point> line : visibleLines) {
             for (final Point point : line) {
                 final MapTile tile = tiles[point.y][point.x];
+                tile.setVisible(true);
+                tile.setVisited(true);
 
                 // If we hit a solid tile, then the rest of the line cannot be visible.
                 if (tile.isSolid()) {
                     break;
                 }
-
-                tile.setVisible(true);
-                tile.setVisited(true);
             }
         }
     }
