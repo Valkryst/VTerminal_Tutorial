@@ -2,6 +2,7 @@ package com.valkryst.VTerminal_Tutorial.entity;
 
 import com.valkryst.VTerminal.Tile;
 import com.valkryst.VTerminal.component.Layer;
+import com.valkryst.VTerminal_Tutorial.LineOfSight;
 import com.valkryst.VTerminal_Tutorial.Map;
 import com.valkryst.VTerminal_Tutorial.Sprite;
 import com.valkryst.VTerminal_Tutorial.action.Action;
@@ -28,6 +29,9 @@ public class Entity extends Layer {
 
     /** The actions to perform. */
     private final Queue<Action> actions = new ConcurrentLinkedQueue<>();
+
+    /** The line of sight. */
+    @Getter @Setter private LineOfSight lineOfSight;
 
     /**
      * Constructs a new Entity.
@@ -67,6 +71,8 @@ public class Entity extends Layer {
         } else {
             this.name = name;
         }
+
+        lineOfSight = new LineOfSight(4, position);
 
         // Set Core Stats
         final BoundStat health = new BoundStat("Health", 0, 00);
