@@ -57,9 +57,12 @@ public class Map extends Layer {
                 if (mapTile.isVisible()) {
                     layerTile.setBackgroundColor(mapTileSprite.getBackgroundColor());
                     layerTile.setForegroundColor(mapTileSprite.getForegroundColor());
-                } else {
+                } else if (mapTile.isVisited()) {
                     layerTile.setBackgroundColor(mapTileSprite.getDarkBackgroundColor());
                     layerTile.setForegroundColor(mapTileSprite.getDarkForegroundColor());
+                } else {
+                    layerTile.setBackgroundColor(Sprite.DARKNESS.getBackgroundColor());
+                    layerTile.setForegroundColor(Sprite.DARKNESS.getForegroundColor());
                 }
             }
         }
