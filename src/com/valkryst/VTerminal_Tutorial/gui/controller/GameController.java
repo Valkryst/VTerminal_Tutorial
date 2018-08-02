@@ -46,7 +46,7 @@ public class GameController extends Controller<GameView, GameModel> {
 
             /*
              * Again, due to the initial rendering quirk, we need to perform the following steps to correctly
-             * render the player with it's LOS on the map when the game first starts.
+             * render the player with its LOS on the map when the game first starts.
              */
             player.getLineOfSight().showLOSOnMap(map);
             map.updateLayerTiles();
