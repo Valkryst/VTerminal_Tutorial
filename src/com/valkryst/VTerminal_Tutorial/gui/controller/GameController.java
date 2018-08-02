@@ -44,8 +44,15 @@ public class GameController extends Controller<GameView, GameModel> {
             final Player player = super.model.getPlayer();
             final Map map = super.model.getMap();
 
-            view.addComponent(player);
+            /*
+             * Again, due to the initial rendering quirk, we need to perform the following steps to correctly
+             * render the player with it's LOS on the map when the game first starts.
+             */
             player.getLineOfSight().showLOSOnMap(map);
+            map.updateLayerTiles();
+            screen.draw();
+
+            view.addComponent(player);
         });
         tempTimer.setRepeats(false);
         tempTimer.start();
