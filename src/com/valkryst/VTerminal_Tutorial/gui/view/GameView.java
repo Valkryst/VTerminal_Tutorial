@@ -16,6 +16,12 @@ public class GameView extends View {
         super(screen);
     }
 
+    /**
+     * Adds any components, defined in the model, to the view.
+     *
+     * @param model
+     *          The model.
+     */
     public void addModelComponents(final GameModel model) {
         final Map map = model.getMap();
         final Player player = model.getPlayer();
