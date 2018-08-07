@@ -31,36 +31,12 @@ public class GameController extends Controller<GameView, GameModel> {
         super(new GameView(screen), new GameModel(screen));
         initializeEventHandlers();
 
-        /*
-         * Add the Map & Player to the View.
-         *
-         * Because of a quirk in VTerminal's rendering, we need to add the player after the map is first
-         * rendered, so that the map appears below the player. We use 1ms as the delay, because the first
-         * render (see the game-loop timer below) occurs right away.
-         */
-        view.addComponent(super.model.getMap());
-
-        final Timer tempTimer = new Timer(1, e-> {
-            final Player player = super.model.getPlayer();
-            final Map map = super.model.getMap();
-
-            /*
-             * Again, due to the initial rendering quirk, we need to perform the following steps to correctly
-             * render the player with its LOS on the map when the game first starts.
-             */
-            player.getLineOfSight().showLOSOnMap(map);
-            map.updateLayerTiles();
-            screen.draw();
-
-            view.addComponent(player);
-        });
-        tempTimer.setRepeats(false);
-        tempTimer.start();
+        super.view.addModelComponents(model);
 
         // Create and start the game-loop timer.
-        timer = new Timer(16, e -> {
-            final Map map = super.model.getMap();
+        final Map map = model.getMap();
 
+        timer = new Timer(16, e -> {
             for (final Entity entity : map.getEntities()) {
                 entity.performActions(map);
             }
