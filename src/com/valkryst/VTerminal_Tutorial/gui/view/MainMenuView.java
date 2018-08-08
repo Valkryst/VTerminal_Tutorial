@@ -53,7 +53,7 @@ public class MainMenuView extends View {
      *          The layer containing the logo.
      */
     private Layer loadLogo() {
-        final Layer layer = new Layer(new Dimension(80, 16), new Point(0, 0));
+        final Layer layer = new Layer(new Dimension(120, 16), new Point(0, 0));
         this.addComponent(layer);
 
 
