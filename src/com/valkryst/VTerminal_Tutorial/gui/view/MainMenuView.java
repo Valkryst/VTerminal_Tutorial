@@ -38,11 +38,11 @@ public class MainMenuView extends View {
     private void initializeComponents() {
         final ButtonBuilder buttonBuilder = new ButtonBuilder();
         buttonBuilder.setText("New Game");
-        buttonBuilder.setPosition(34, 16);
+        buttonBuilder.setPosition(54, 22);
         button_new = buttonBuilder.build();
 
         buttonBuilder.setText("Exit");
-        buttonBuilder.setPosition(36, 18);
+        buttonBuilder.setPosition(56, 24);
         button_exit = buttonBuilder.build();
     }
 
