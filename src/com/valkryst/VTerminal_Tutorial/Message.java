@@ -4,7 +4,6 @@ import com.valkryst.VTerminal.Tile;
 import lombok.Getter;
 
 import java.awt.*;
-import java.util.Arrays;
 
 public class Message {
     /** The default background color of all messages. */
