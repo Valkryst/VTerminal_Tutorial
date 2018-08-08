@@ -4,8 +4,14 @@ import com.valkryst.VTerminal.Tile;
 import lombok.Getter;
 
 import java.awt.*;
+import java.util.Arrays;
 
 public class Message {
+    /** The default background color of all messages. */
+    private final static Color DEFAULT_BACKGROUND_COLOR = new Color(0xFF8E999E);
+    /** The default foreground color of all messages. */
+    private final static Color DEFAULT_FOREGROUND_COLOR = new Color(0xFF68D0FF);
+
     /** The message. */
     @Getter private Tile[] message;
 
@@ -33,20 +39,18 @@ public class Message {
      * Prepares an array of tiles with the default message box colors.
      *
      * @param length
-     *           The length of the array.
+     *          The length of the array.
      *
      * @return
      *          The array.
      */
     public static Tile[] prepareString(final int length) {
         final Tile[] tiles = new Tile[length];
-        final Color backgroundColor = new Color(0xFF8E999E, true);
-        final Color foregroundColor = new Color(0xFF68D0FF, true);
 
         for (int i = 0 ; i < tiles.length ; i++) {
             tiles[i] = new Tile(' ');
-            tiles[i].setBackgroundColor(backgroundColor);
-            tiles[i].setForegroundColor(foregroundColor);
+            tiles[i].setBackgroundColor(DEFAULT_BACKGROUND_COLOR);
+            tiles[i].setForegroundColor(DEFAULT_FOREGROUND_COLOR);
         }
 
         return tiles;
@@ -56,7 +60,7 @@ public class Message {
      * Prepares a string with the default message box colors.
      *
      * @param text
-     *           The text of the AsciiString,
+     *          The text of the AsciiString,
      *
      * @return
      *          The tiles.
@@ -67,14 +71,12 @@ public class Message {
         }
 
         final Tile[] tiles = new Tile[text.length()];
-        final Color backgroundColor = new Color(0xFF8E999E, true);
-        final Color foregroundColor = new Color(0xFF68D0FF, true);
 
-        for (int x = 0 ; x < text.length() ; x++) {
-            tiles[x] = new Tile(text.charAt(x));
-            tiles[x].setCharacter(text.charAt(x));
-            tiles[x].setBackgroundColor(backgroundColor);
-            tiles[x].setForegroundColor(foregroundColor);
+        for (int i = 0 ; i < text.length() ; i++) {
+            tiles[i] = new Tile(text.charAt(i));
+            tiles[i].setCharacter(text.charAt(i));
+            tiles[i].setBackgroundColor(DEFAULT_BACKGROUND_COLOR);
+            tiles[i].setForegroundColor(DEFAULT_FOREGROUND_COLOR);
         }
 
         return tiles;
@@ -113,14 +115,14 @@ public class Message {
 
         final Tile[] newMessage = new Tile[message.length + text.length];
 
-        for (int x = 0 ; x < message.length ; x++) {
-            newMessage[x] = new Tile(' ');
-            newMessage[x].copy(message[x]);
+        for (int i = 0 ; i < message.length ; i++) {
+            newMessage[i] = new Tile(' ');
+            newMessage[i].copy(message[i]);
         }
 
-        for (int x = message.length ; x < newMessage.length ; x++) {
-            newMessage[x] = new Tile(' ');
-            newMessage[x].copy(text[x - message.length]);
+        for (int i = message.length ; i < newMessage.length ; i++) {
+            newMessage[i] = new Tile(' ');
+            newMessage[i].copy(text[i - message.length]);
         }
 
         message = newMessage;
