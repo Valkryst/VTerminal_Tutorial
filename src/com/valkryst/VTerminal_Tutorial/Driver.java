@@ -10,7 +10,7 @@ import java.io.IOException;
 public class Driver {
     public static void main(String[] args) throws IOException {
         final Font font = FontLoader.loadFontFromJar("Fonts/DejaVu Sans Mono/18pt/bitmap.png", "Fonts/DejaVu Sans Mono/18pt/data.fnt", 1);
-        final Screen screen = new Screen(80, 40, font);
+        final Screen screen = new Screen(120, 45, font);
         screen.addCanvasToFrame();
 
         final MainMenuController controller = new MainMenuController(screen);
