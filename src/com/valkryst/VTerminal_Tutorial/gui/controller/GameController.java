@@ -2,6 +2,7 @@ package com.valkryst.VTerminal_Tutorial.gui.controller;
 
 import com.valkryst.VTerminal.Screen;
 import com.valkryst.VTerminal_Tutorial.Map;
+import com.valkryst.VTerminal_Tutorial.Message;
 import com.valkryst.VTerminal_Tutorial.entity.Entity;
 import com.valkryst.VTerminal_Tutorial.entity.Player;
 import com.valkryst.VTerminal_Tutorial.gui.model.GameModel;
@@ -93,5 +94,17 @@ public class GameController extends Controller<GameView, GameModel> {
         };
 
         super.getModel().getEventListeners().add(keyListener);
+    }
+
+    /**
+     * Adds a message to the message box.
+     *
+     * @param message
+     *          The message.
+     */
+    public void displayMessage(final Message message) {
+        if (message != null) {
+            view.getMessageBox().appendText(message.getMessage());
+        }
     }
 }
