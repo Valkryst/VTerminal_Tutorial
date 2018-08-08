@@ -2,7 +2,6 @@ package com.valkryst.VTerminal_Tutorial;
 
 import com.valkryst.VTerminal.Tile;
 import lombok.Getter;
-import lombok.NonNull;
 
 import java.awt.*;
 
@@ -19,10 +18,14 @@ public class Message {
      * Constructs a new message.
      *
      * @param message
-     *           The message.
+     *          The message.
      */
-    public Message(final @NonNull String message) {
-        this.message = prepareString(message);
+    public Message(final String message) {
+        if (message == null) {
+            this.message = prepareString(0);
+        } else {
+            this.message = prepareString(message);
+        }
     }
 
 
@@ -58,7 +61,11 @@ public class Message {
      * @return
      *          The tiles.
      */
-    public static Tile[] prepareString(final @NonNull String text) {
+    public static Tile[] prepareString(final String text) {
+        if (text == null) {
+            return new Tile[0];
+        }
+
         final Tile[] tiles = new Tile[text.length()];
         final Color backgroundColor = new Color(0xFF8E999E, true);
         final Color foregroundColor = new Color(0xFF68D0FF, true);
@@ -82,8 +89,11 @@ public class Message {
      * @return
      *          This.
      */
-    public Message append(final @NonNull String text) {
-        append(prepareString(text));
+    public Message append(final String text) {
+        if (text != null) {
+            append(prepareString(text));
+        }
+
         return this;
     }
 
@@ -96,7 +106,11 @@ public class Message {
      * @return
      *          This.
      */
-    public Message append(final @NonNull Tile[] text) {
+    public Message append(final Tile[] text) {
+        if (text == null) {
+            return this;
+        }
+
         final Tile[] newMessage = new Tile[message.length + text.length];
 
         for (int x = 0 ; x < message.length ; x++) {
