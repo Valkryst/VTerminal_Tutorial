@@ -32,7 +32,7 @@
         <dependency>
             <groupId>com.github.Valkryst</groupId>
             <artifactId>VTerminal</artifactId>
-            <version>3.4.2</version>
+            <version>b5c595b</version>
         </dependency>
     </dependencies>
 
