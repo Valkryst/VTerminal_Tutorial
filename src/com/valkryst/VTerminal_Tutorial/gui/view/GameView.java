@@ -39,6 +39,7 @@ public class GameView extends View {
         final Player player = model.getPlayer();
         final Entity enemy = new Entity(Sprite.ENEMY, new Point(15, 12), "Gary");
 
+        map.getEntities().add(enemy);
         this.addComponent(map);
 
         this.addComponent(player);
