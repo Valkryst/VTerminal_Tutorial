@@ -3,10 +3,10 @@ package com.valkryst.VTerminal_Tutorial.entity;
 import com.valkryst.VTerminal.Tile;
 import com.valkryst.VTerminal.component.Layer;
 import com.valkryst.VTerminal_Tutorial.LineOfSight;
-import com.valkryst.VTerminal_Tutorial.Map;
 import com.valkryst.VTerminal_Tutorial.Sprite;
 import com.valkryst.VTerminal_Tutorial.action.Action;
 import com.valkryst.VTerminal_Tutorial.action.MoveAction;
+import com.valkryst.VTerminal_Tutorial.gui.controller.GameController;
 import com.valkryst.VTerminal_Tutorial.statistic.BoundStat;
 import com.valkryst.VTerminal_Tutorial.statistic.Stat;
 import lombok.Getter;
@@ -87,12 +87,12 @@ public class Entity extends Layer {
     /**
      * Performs all of the entity's actions.
      *
-     * @param map
-     *          The map on which the entity exists.
+     * @param controller
+     *          The game controller.
      */
-    public void performActions(final Map map) {
+    public void performActions(final GameController controller) {
         for (final Action action : actions) {
-            action.perform(map, this);
+            action.perform(controller, this);
         }
 
         actions.clear();
