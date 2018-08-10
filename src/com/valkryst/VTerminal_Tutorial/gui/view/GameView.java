@@ -4,9 +4,13 @@ import com.valkryst.VTerminal.Screen;
 import com.valkryst.VTerminal.builder.TextAreaBuilder;
 import com.valkryst.VTerminal.component.TextArea;
 import com.valkryst.VTerminal_Tutorial.Map;
+import com.valkryst.VTerminal_Tutorial.Sprite;
+import com.valkryst.VTerminal_Tutorial.entity.Entity;
 import com.valkryst.VTerminal_Tutorial.entity.Player;
 import com.valkryst.VTerminal_Tutorial.gui.model.GameModel;
 import lombok.Getter;
+
+import java.awt.*;
 
 public class GameView extends View {
     /** The area in which messages are displayed. */
@@ -33,11 +37,14 @@ public class GameView extends View {
 
         final Map map = model.getMap();
         final Player player = model.getPlayer();
+        final Entity enemy = new Entity(Sprite.ENEMY, new Point(15, 12), "Gary");
 
         this.addComponent(map);
 
         this.addComponent(player);
         player.getLineOfSight().showLOSOnMap(map);
+
+        this.addComponent(enemy);
 
         this.addComponent(messageBox);
     }
