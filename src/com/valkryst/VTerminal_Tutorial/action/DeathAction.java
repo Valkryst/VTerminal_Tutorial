@@ -18,6 +18,7 @@ public class DeathAction extends Action {
 
         if (map != null) {
             map.getEntities().remove(self);
+            controller.getView().removeComponent(self);
             controller.displayMessage(new Message().appendEntityName(self).append(" has died."));
         }
     }
