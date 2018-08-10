@@ -1,7 +1,7 @@
 package com.valkryst.VTerminal_Tutorial.action;
 
-import com.valkryst.VTerminal_Tutorial.Map;
 import com.valkryst.VTerminal_Tutorial.entity.Entity;
+import com.valkryst.VTerminal_Tutorial.gui.controller.GameController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,14 +15,14 @@ public class Action {
      *
      * Does nothing if the map or entity are null.
      *
-     * @param map
-     *          The map.
+     * @param controller
+     *          The game controller.
      *
      * @param entity
      *          The entity performing the action.
      */
-    public void perform(final Map map, final Entity entity) {
-        if (map == null || entity == null) {
+    public void perform(final GameController controller, final Entity entity) {
+        if (controller.getModel().getMap() == null || entity == null) {
             return;
         }
 
