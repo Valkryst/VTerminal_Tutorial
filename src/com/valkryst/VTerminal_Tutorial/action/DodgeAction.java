@@ -5,7 +5,7 @@ import com.valkryst.VTerminal_Tutorial.gui.controller.GameController;
 
 public class DodgeAction extends Action {
     @Override
-    public void perform(final GameController controller, final Entity entity) {
-        super.perform(controller, entity);
+    public void perform(final GameController controller, final Entity self) {
+        super.perform(controller, self);
     }
 }
