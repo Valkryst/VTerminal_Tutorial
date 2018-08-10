@@ -1,6 +1,7 @@
 package com.valkryst.VTerminal_Tutorial;
 
 import com.valkryst.VTerminal.Tile;
+import com.valkryst.VTerminal_Tutorial.entity.Entity;
 import lombok.Getter;
 
 import java.awt.*;
@@ -125,6 +126,40 @@ public class Message {
         }
 
         message = newMessage;
+
+        return this;
+    }
+
+    /**
+     * Appends the name of an entity to the message.
+     *
+     * The entity's name uses the foreground color of it's sprite.
+     *
+     * @param entity
+     *          The entity.
+     *
+     * @return
+     *          This.
+     */
+    public Message appendEntityName(final Entity entity) {
+        final String name;
+        final Color color;
+
+        if (entity == null) {
+            name = "Null";
+            color = Color.MAGENTA;
+        } else {
+            name = entity.getName();
+            color = entity.getSprite().getForegroundColor();
+        }
+
+        final Tile[] selfName = Message.prepareString(name);
+
+        for (final Tile tile : selfName) {
+            tile.setForegroundColor(color);
+        }
+
+        append(selfName);
 
         return this;
     }
