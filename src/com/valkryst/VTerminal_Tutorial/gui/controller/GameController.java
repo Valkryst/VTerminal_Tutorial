@@ -39,7 +39,7 @@ public class GameController extends Controller<GameView, GameModel> {
 
         timer = new Timer(16, e -> {
             for (final Entity entity : map.getEntities()) {
-                entity.performActions(map);
+                entity.performActions(this);
             }
 
             map.updateLayerTiles();
