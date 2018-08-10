@@ -4,6 +4,7 @@ import com.valkryst.VTerminal_Tutorial.LineOfSight;
 import com.valkryst.VTerminal_Tutorial.Map;
 import com.valkryst.VTerminal_Tutorial.entity.Entity;
 import com.valkryst.VTerminal_Tutorial.entity.Player;
+import com.valkryst.VTerminal_Tutorial.gui.controller.GameController;
 
 import java.awt.*;
 
@@ -38,13 +39,15 @@ public class MoveAction extends Action {
     }
 
     @Override
-    public void perform(final Map map, final Entity entity) {
+    public void perform(final GameController controller, final Entity entity) {
+        final Map map = controller.getModel().getMap();
+
         if (map == null || entity == null) {
             return;
         }
 
         if (map.isPositionFree(newPosition)) {
-            super.perform(map, entity);
+            super.perform(controller, entity);
             entity.getTiles().setPosition(newPosition);
 
             if (entity instanceof Player) {
