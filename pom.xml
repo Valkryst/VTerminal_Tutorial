@@ -34,6 +34,11 @@
             <artifactId>VTerminal</artifactId>
             <version>b5c595b</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.Valkryst</groupId>
+            <artifactId>VDice</artifactId>
+            <version>1.1.2</version>
+        </dependency>
     </dependencies>
 
     <build>
