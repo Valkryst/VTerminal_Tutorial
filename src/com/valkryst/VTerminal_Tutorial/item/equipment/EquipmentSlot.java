@@ -12,7 +12,8 @@ public enum EquipmentSlot {
     LEGS,
     FEET,
     MAIN_HAND,
-    OFF_HAND;
+    OFF_HAND,
+    UNKNOWN;
 
     /**
      * Retrieves the name of the equipment slot.
