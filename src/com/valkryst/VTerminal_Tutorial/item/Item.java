@@ -51,11 +51,9 @@ public class Item {
      *          The stat.
      */
     public void addStat(final Stat stat) {
-        if (stat == null) {
-            return;
+        if (stat != null) {
+            stats.putIfAbsent(stat.getName().toLowerCase(), stat);
         }
-
-        stats.putIfAbsent(stat.getName().toLowerCase(), stat);
     }
 
     /**
@@ -65,11 +63,9 @@ public class Item {
      *          The name of the stat.
      */
     public void removeStat(final String name) {
-        if (name == null) {
-            return;
+        if (name != null) {
+            stats.remove(name.toLowerCase());
         }
-
-        stats.remove(name.toLowerCase());
     }
 
     /**
