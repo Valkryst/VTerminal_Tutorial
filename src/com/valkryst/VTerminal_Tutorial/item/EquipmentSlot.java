@@ -1,4 +1,4 @@
-package com.valkryst.VTerminal_Tutorial.item.equipment;
+package com.valkryst.VTerminal_Tutorial.item;
 
 public enum EquipmentSlot {
     HEAD,
