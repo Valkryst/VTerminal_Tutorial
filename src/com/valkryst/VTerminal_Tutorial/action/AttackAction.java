@@ -4,6 +4,9 @@ import com.valkryst.VDice.DiceRoller;
 import com.valkryst.VTerminal_Tutorial.Message;
 import com.valkryst.VTerminal_Tutorial.entity.Entity;
 import com.valkryst.VTerminal_Tutorial.gui.controller.GameController;
+import com.valkryst.VTerminal_Tutorial.item.Equipment;
+import com.valkryst.VTerminal_Tutorial.item.EquipmentSlot;
+import com.valkryst.VTerminal_Tutorial.item.Inventory;
 import com.valkryst.VTerminal_Tutorial.statistic.BoundStat;
 
 public class AttackAction extends Action {
@@ -38,6 +41,8 @@ public class AttackAction extends Action {
 
         // Critical Miss
         if (actionRoll == 1) {
+            damage = calculateDamage(self, self);
+
             final BoundStat health = (BoundStat) self.getStat("Health");
             health.setValue(health.getValue() - damage);
 
@@ -58,19 +63,19 @@ public class AttackAction extends Action {
 
         // Normal Attack
         if (actionRoll >= 5 && actionRoll <= 16) {
-            damage = getDamageDealt(self, target);
+            damage = calculateDamage(self, target);
             message = getAttackMessage(self, damage);
         }
 
         // Double Attack
         if (actionRoll > 16 && actionRoll < 20) {
-            damage = getDamageDealt(self, target) * 2;
+            damage = calculateDamage(self, target) * 2;
             message = getDoubleAttackMessage(self, damage);
         }
 
         // Critical Attack
         if (actionRoll == 20) {
-            damage = getDamageDealt(self, target) * 3;
+            damage = calculateDamage(self, target) * 3;
             message = getCriticalAttackMessage(self, damage);
         }
 
@@ -102,9 +107,26 @@ public class AttackAction extends Action {
      * @return
      *        The damage dealt.
      */
-    private static int getDamageDealt(final Entity self, final Entity target) {
-        // todo Change this to something other than a static value in the future.
-        return 10;
+    private int calculateDamage(final Entity self, final Entity target) {
+        // Calculate Target Armor
+        final Inventory targetInventory = target.getInventory();
+
+        int armor = 0;
+
+        for (final EquipmentSlot slot : EquipmentSlot.values()) {
+            armor += targetInventory.getEquipment(slot).getArmor();
+        }
+
+        // Calculate Damage
+        final Inventory selfInventory = self.getInventory();
+        final Equipment mainHand = selfInventory.getEquipment(EquipmentSlot.MAIN_HAND);
+        final Equipment offHand = selfInventory.getEquipment(EquipmentSlot.OFF_HAND);
+
+        final int damage = mainHand.rollDamage() + offHand.rollDamage();
+
+        // Calculate Result
+        final int result = damage - armor;
+        return result > 0 ? result : 0;
     }
 
     /**
