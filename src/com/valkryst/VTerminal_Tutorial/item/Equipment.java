@@ -55,7 +55,7 @@ public class Equipment extends Item {
         final int maxDamage = damageStat.getMaxValue();
 
         final DiceRoller diceRoller = new DiceRoller();
-        diceRoller.addDice(1, maxDamage - minDamage);
+        diceRoller.addDice(maxDamage - minDamage, 1);
 
         return diceRoller.roll() + minDamage;
     }
