@@ -114,7 +114,8 @@ public class AttackAction extends Action {
         int armor = 0;
 
         for (final EquipmentSlot slot : EquipmentSlot.values()) {
-            armor += targetInventory.getEquipment(slot).getArmor();
+            final Equipment equipment = targetInventory.getEquipment(slot);
+            armor += (equipment == null ? 0 : equipment.getArmor());
         }
 
         // Calculate Damage
@@ -122,7 +123,9 @@ public class AttackAction extends Action {
         final Equipment mainHand = selfInventory.getEquipment(EquipmentSlot.MAIN_HAND);
         final Equipment offHand = selfInventory.getEquipment(EquipmentSlot.OFF_HAND);
 
-        final int damage = mainHand.rollDamage() + offHand.rollDamage();
+        int damage = 0;
+        damage+= (mainHand == null ? 0 : mainHand.rollDamage());
+        damage+= (offHand == null ? 0 : offHand.rollDamage());
 
         // Calculate Result
         final int result = damage - armor;
