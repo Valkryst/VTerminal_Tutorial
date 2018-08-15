@@ -146,7 +146,7 @@ public class AttackAction extends Action {
      */
     private Message getCriticalMissMessage(final Entity self, final int damage) {
         return new Message().appendEntityName(self)
-                               .append(" missed and attacked itself for" + damage + " damage.");
+                               .append(" missed and attacked itself for " + damage + " damage.");
     }
 
     /**
