@@ -7,6 +7,7 @@ import com.valkryst.VTerminal_Tutorial.Sprite;
 import com.valkryst.VTerminal_Tutorial.action.Action;
 import com.valkryst.VTerminal_Tutorial.action.MoveAction;
 import com.valkryst.VTerminal_Tutorial.gui.controller.GameController;
+import com.valkryst.VTerminal_Tutorial.item.Inventory;
 import com.valkryst.VTerminal_Tutorial.statistic.BoundStat;
 import com.valkryst.VTerminal_Tutorial.statistic.Stat;
 import lombok.Getter;
@@ -26,6 +27,9 @@ public class Entity extends Layer {
 
     /** The stats. */
     private final HashMap<String, Stat> stats = new HashMap<>();
+
+    /** The inventory. */
+    @Getter private final Inventory inventory = new Inventory(26);
 
     /** The actions to perform. */
     private final Queue<Action> actions = new ConcurrentLinkedQueue<>();
