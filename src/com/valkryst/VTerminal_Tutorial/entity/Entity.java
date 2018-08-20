@@ -1,7 +1,10 @@
 package com.valkryst.VTerminal_Tutorial.entity;
 
 import com.valkryst.VTerminal.Tile;
+import com.valkryst.VTerminal.builder.LabelBuilder;
+import com.valkryst.VTerminal.component.Label;
 import com.valkryst.VTerminal.component.Layer;
+import com.valkryst.VTerminal.printer.RectanglePrinter;
 import com.valkryst.VTerminal_Tutorial.LineOfSight;
 import com.valkryst.VTerminal_Tutorial.Sprite;
 import com.valkryst.VTerminal_Tutorial.action.Action;
@@ -223,5 +226,91 @@ public class Entity extends Layer {
         }
 
         return stats.get(name.toLowerCase());
+    }
+
+    /**
+     * Constructs an information panel, containing a number of important statistics, for an entity.
+     *
+     * @param entity
+     *          The entity.
+     *
+     * @return
+     *          The layer containing all of the information.
+     */
+    public static Layer getInformationPanel(final Entity entity) {
+        final Layer layer = new Layer(new Dimension(40, 8));
+
+        // Print border
+        final RectanglePrinter rectanglePrinter = new RectanglePrinter();
+        rectanglePrinter.setWidth(40);
+        rectanglePrinter.setHeight(8);
+        rectanglePrinter.setTitle(entity.getName());
+        rectanglePrinter.print(layer.getTiles(), new Point(0, 0));
+
+        // Color name on the border
+        final Color color = entity.getSprite().getForegroundColor();
+        final Tile[] nameTiles = layer.getTiles().getRowSubset(0, 2, entity.getName().length());
+
+        for (final Tile tile : nameTiles) {
+            tile.setForegroundColor(color);
+        }
+
+        // Retrieve Stats
+        final BoundStat health = (BoundStat) entity.getStat("Health");
+        final BoundStat level = (BoundStat) entity.getStat("Level");
+        final BoundStat experience = (BoundStat) entity.getStat("Experience");
+
+        // Create runnable functions, used to add/update labels.
+        final Runnable add_level = () -> {
+            layer.getComponentsByID(entity.getName() + "-" + level.getName()).forEach(layer::removeComponent);
+
+            final Label label = level.getLabel();
+            label.setId(entity.getName() + "-" + label.getId());
+            label.getTiles().setPosition(1, 1);
+
+            layer.addComponent(label);
+        };
+
+        final Runnable add_xp = () -> {
+            layer.getComponentsByID(entity.getName() + "-" + experience.getName()).forEach(layer::removeComponent);
+
+            final Label label = experience.getBoundLabel();
+            label.setId(entity.getName() + "-" + label.getId());
+            label.getTiles().setPosition(1, 2);
+
+            layer.addComponent(label);
+        };
+
+        final Runnable add_health = () -> {
+            layer.getComponentsByID(entity.getName() + "-" + health.getName()).forEach(layer::removeComponent);
+
+            final Label label;
+
+            if (health.getValue() > 0) {
+                label = health.getBoundLabel();
+                label.getTiles().setPosition(1, 3);
+            } else {
+                final LabelBuilder builder = new LabelBuilder();
+                builder.setText("Health: Deceased");
+                builder.setPosition(1, 3);
+                label = builder.build();
+            }
+
+            label.setId(entity.getName() + "-" + label.getId());
+
+            layer.addComponent(label);
+        };
+
+        // Add runnable functions to their associated stat.
+        level.getRunnables().add(add_level);
+        experience.getRunnables().add(add_xp);
+        health.getRunnables().add(add_health);
+
+        // Run the runnable functions in order to add the labels to the layer.
+        add_level.run();
+        add_xp.run();
+        add_health.run();
+
+        return layer;
     }
 }
