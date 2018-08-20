@@ -90,7 +90,7 @@ public class AttackAction extends Action {
 
         super.perform(controller, self);
 
-        if (health.getValue() == health.getMinValue()) {
+        if (health.getValue() <= health.getMinValue()) {
             new DeathAction().perform(controller, target);
         }
     }
