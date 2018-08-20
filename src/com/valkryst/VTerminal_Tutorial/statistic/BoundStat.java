@@ -1,5 +1,7 @@
 package com.valkryst.VTerminal_Tutorial.statistic;
 
+import com.valkryst.VTerminal.builder.LabelBuilder;
+import com.valkryst.VTerminal.component.Label;
 import lombok.Getter;
 
 public class BoundStat extends Stat {
@@ -55,6 +57,26 @@ public class BoundStat extends Stat {
      */
     public BoundStat(final String name, final int minValue, final int maxValue) {
         this(name, maxValue, minValue, maxValue);
+    }
+
+    /**
+     * Constructs and returns a label with the stat name, value, and max value.
+     *
+     * The label is formatted as follows.
+     *
+     * StatName: Value/MaxValue
+     *
+     * @return
+     *          The label.
+     */
+    public Label getBoundLabel() {
+        final LabelBuilder labelBuilder = new LabelBuilder();
+        labelBuilder.setText(super.getName() + ": " + super.getValue() + "/" + maxValue);
+
+        final Label label = labelBuilder.build();
+        label.setId(super.getName());
+
+        return label;
     }
 
     @Override
