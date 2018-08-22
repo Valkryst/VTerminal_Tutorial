@@ -33,10 +33,10 @@ public class LootEntry {
     }
 
     /**
-     * Determines whether or not the loot should be dropped.
+     * Determines whether or not the loot is dropped.
      *
      * @return
-     *          Whether or not the loot should be dropped.
+     *          Whether or not the loot is dropped.
      */
     public boolean drop() {
         if (dropChance == 0) {
