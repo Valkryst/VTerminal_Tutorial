@@ -29,7 +29,7 @@ public class LootTable {
     }
 
     /**
-     * Retrieves a set of loot from the loot table.
+     * Generates a set of loot from the loot table.
      *
      * @return
      *        The loot.
