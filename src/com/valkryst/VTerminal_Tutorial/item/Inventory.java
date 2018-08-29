@@ -157,6 +157,31 @@ public class Inventory {
     }
 
     /**
+     * Retrieves the first occurrence of an item with a specific name.
+     *
+     * @param name
+     *          The name.
+     *
+     * @return
+     *          Either the item, or null if no item uses the name.
+     */
+    public Item getItem(String name) {
+        if (name == null || name.isEmpty()) {
+            return null;
+        }
+
+        name = name.toLowerCase();
+
+        for (final Item item : items) {
+            if (item != null && item.getName().toLowerCase().equals(name)) {
+                return item;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Retrieves the size of the inventory, excluding equipment slots.
      *
      * @return
