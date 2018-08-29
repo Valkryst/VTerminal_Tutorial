@@ -38,9 +38,11 @@ public class Inventory {
 
         final EquipmentSlot slot = item.getSlot();
 
-        if (put(equipment.get(slot))) {
-            equipment.put(slot, item);
+        if (equipment.get(slot) != null) {
+            put(equipment.remove(slot));
         }
+
+        equipment.put(slot, item);
     }
 
     /**
@@ -97,7 +99,7 @@ public class Inventory {
         }
 
         for (int i = 0 ; i < items.length ; i++) {
-            if (items[i].equals(item)) {
+            if (items[i] != null && items[i].equals(item)) {
                 items[i] = null;
             }
         }
