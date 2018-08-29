@@ -32,12 +32,17 @@
         <dependency>
             <groupId>com.github.Valkryst</groupId>
             <artifactId>VTerminal</artifactId>
-            <version>3.4.6</version>
+            <version>3.4.7</version>
         </dependency>
         <dependency>
             <groupId>com.github.Valkryst</groupId>
             <artifactId>VDice</artifactId>
             <version>1.1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.Valkryst</groupId>
+            <artifactId>VJSON</artifactId>
+            <version>d3313e4</version>
         </dependency>
     </dependencies>
 
