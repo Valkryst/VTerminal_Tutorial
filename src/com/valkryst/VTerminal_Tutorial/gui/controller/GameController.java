@@ -6,12 +6,12 @@ import com.valkryst.VTerminal_Tutorial.Message;
 import com.valkryst.VTerminal_Tutorial.entity.Entity;
 import com.valkryst.VTerminal_Tutorial.entity.Player;
 import com.valkryst.VTerminal_Tutorial.gui.model.GameModel;
+import com.valkryst.VTerminal_Tutorial.gui.model.InventoryModel;
 import com.valkryst.VTerminal_Tutorial.gui.view.GameView;
+import com.valkryst.VTerminal_Tutorial.item.Inventory;
 import lombok.Getter;
-import lombok.NonNull;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -24,13 +24,10 @@ public class GameController extends Controller<GameView, GameModel> {
      *
      * @param screen
      *          The screen on which the view is displayed.
-     *
-     * @throws NullPointerException
-     *          If the screen is null.
      */
-    public GameController(final @NonNull Screen screen) {
+    public GameController(final Screen screen) {
         super(new GameView(screen), new GameModel(screen));
-        initializeEventHandlers();
+        initializeEventHandlers(screen);
 
         super.view.addModelComponents(model);
 
@@ -50,9 +47,15 @@ public class GameController extends Controller<GameView, GameModel> {
         timer.start();
     }
 
-    /** Creates any event handlers required by the view. */
-    private void initializeEventHandlers() {
+    /**
+     * Creates any event handlers required by the view.
+     *
+     * @param screen
+     *          The screen on which the view is displayed.
+     */
+    private void initializeEventHandlers(final Screen screen) {
         final Player player = super.model.getPlayer();
+        final GameController gameController = this;
 
         final KeyListener keyListener = new KeyListener() {
             @Override
@@ -87,6 +90,20 @@ public class GameController extends Controller<GameView, GameModel> {
                     case KeyEvent.VK_D:
                     case KeyEvent.VK_RIGHT: {
                         player.move(1, 0);
+                        break;
+                    }
+
+                    case KeyEvent.VK_I: {
+                        // Remove this view from the screen.
+                        GameController.super.removeFromScreen(screen);
+
+                        // Add the new view to the screen.
+                        final Inventory playerInventory = GameController.super.model.getPlayer().getInventory();
+                        // todo Deal with loot inventory
+
+                        final InventoryModel model = new InventoryModel(playerInventory);
+                        final InventoryController controller = new InventoryController(screen, gameController, model);
+                        controller.addToScreen(screen);
                         break;
                     }
                 }
