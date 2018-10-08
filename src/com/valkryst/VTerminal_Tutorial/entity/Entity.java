@@ -171,7 +171,7 @@ public class Entity extends Layer {
             sprite = Sprite.UNKNOWN;
         }
 
-        final Tile tile = super.getTileAt(new Point(0, 0));
+        final Tile tile = super.getTileAt(0, 0);
         tile.setCharacter(sprite.getCharacter());
         tile.setForegroundColor(sprite.getForegroundColor());
         tile.setBackgroundColor(sprite.getBackgroundColor());
