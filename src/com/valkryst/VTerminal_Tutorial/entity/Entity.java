@@ -32,7 +32,7 @@ public class Entity extends Layer {
     private final HashMap<String, Stat> stats = new HashMap<>();
 
     /** The inventory. */
-    @Getter private final Inventory inventory = new Inventory(26);
+    @Getter private Inventory inventory = new Inventory(26);
 
     /** The actions to perform. */
     private final Queue<Action> actions = new ConcurrentLinkedQueue<>();
@@ -89,6 +89,39 @@ public class Entity extends Layer {
         addStat(health);
         addStat(level);
         addStat(experience);
+    }
+
+    /**
+     * Constructs a new Entity.
+     *
+     * @param sprite
+     *          The sprite.
+     *
+     *          Defaults to UNKNOWN if the sprite is null.
+     *
+     * @param position
+     *          The position of the entity within a map.
+     *
+     *          Defaults to (0, 0) if the position is null or if either part of the coordinate is negative.
+     *
+     * @param name
+     *          The name.
+     *
+     *          Defaults to NoNameSet if the name is null or empty.
+     *
+     * @param inventory
+     *          The inventory.
+     *
+     *          Defaults to an empty inventory if null.
+     */
+    public Entity(final Sprite sprite, final Point position, final String name, final Inventory inventory) {
+        this(sprite, position, name);
+
+        if (inventory == null) {
+            this.inventory = new Inventory(26);
+        } else {
+            this.inventory = inventory;
+        }
     }
 
     /**
