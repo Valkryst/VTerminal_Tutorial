@@ -16,7 +16,7 @@ public enum Sprite {
     PLAYER('@', new Color(0, 0, 0 ,0), Color.GREEN),
     ENEMY('E', new Color(0, 0, 0, 0), Color.RED),
 
-    CONTAINER('C', new Color(0, 0, 0 ,0), Color.GREEN);
+    CONTAINER('C', new Color(0, 0, 0 ,0), Color.YELLOW);
 
     /** The character. */
     @Getter private final char character;
