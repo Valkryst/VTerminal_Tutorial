@@ -2,6 +2,7 @@ package com.valkryst.VTerminal_Tutorial.action;
 
 import com.valkryst.VTerminal_Tutorial.LineOfSight;
 import com.valkryst.VTerminal_Tutorial.Map;
+import com.valkryst.VTerminal_Tutorial.entity.Container;
 import com.valkryst.VTerminal_Tutorial.entity.Entity;
 import com.valkryst.VTerminal_Tutorial.entity.Player;
 import com.valkryst.VTerminal_Tutorial.gui.controller.GameController;
@@ -53,7 +54,7 @@ public class MoveAction extends Action {
                 // If the Entity being moved is the player, then we attack non-player entities.
                 // Else if the Entity being moved isn't the player, then we attack player entities.
                 if (self instanceof Player) {
-                    if (target instanceof Player == false) {
+                    if (target instanceof Player == false && target instanceof Container == false) {
                         new AttackAction(target).perform(controller, self);
                         return;
                     }
