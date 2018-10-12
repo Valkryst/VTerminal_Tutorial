@@ -192,4 +192,20 @@ public class Inventory {
     public int getSize() {
         return items.length;
     }
+
+    /**
+     * Retrieves the number of items in the inventory, excluding equipment slots.
+     *
+     * @return
+     *          The number of items currently in the inventory, not including equipped items.
+     */
+    public int getTotalItems() {
+        int total = 0;
+
+        for (final Item item : items) {
+            total += (item == null) ? 0 : 1;
+        }
+
+        return total;
+    }
 }
