@@ -2,6 +2,7 @@ package com.valkryst.VTerminal_Tutorial;
 
 import com.valkryst.VTerminal.Tile;
 import com.valkryst.VTerminal.component.Layer;
+import com.valkryst.VTerminal_Tutorial.entity.Container;
 import com.valkryst.VTerminal_Tutorial.entity.Entity;
 import lombok.Getter;
 
@@ -95,6 +96,10 @@ public class Map extends Layer {
 
         // Check for entities at the position.
         for (final Entity entity : entities) {
+            if (entity instanceof Container) {
+                continue;
+            }
+
             if (entity.getPosition().equals(position)) {
                 return false;
             }
