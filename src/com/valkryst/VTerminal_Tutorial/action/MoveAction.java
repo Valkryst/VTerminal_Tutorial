@@ -51,10 +51,14 @@ public class MoveAction extends Action {
         // Attack any enemies at new location:
         for (final Entity target : map.getEntities()) {
             if (target.getPosition().equals(newPosition)) {
+                if (target instanceof Container) {
+                    continue;
+                }
+
                 // If the Entity being moved is the player, then we attack non-player entities.
                 // Else if the Entity being moved isn't the player, then we attack player entities.
                 if (self instanceof Player) {
-                    if (target instanceof Player == false && target instanceof Container == false) {
+                    if (target instanceof Player == false) {
                         new AttackAction(target).perform(controller, self);
                         return;
                     }
