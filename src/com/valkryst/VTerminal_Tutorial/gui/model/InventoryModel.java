@@ -4,47 +4,36 @@ import com.valkryst.VTerminal_Tutorial.item.Inventory;
 import lombok.Getter;
 
 public class InventoryModel extends Model {
-    private final static Inventory EMPTY_INVENTORY = new Inventory(0);
+    private final static int MAX_INVENTORY_SIZE = 26;
 
     /** The player's inventory. */
-    @Getter private final Inventory playerInventory;
+    @Getter private Inventory playerInventory;
     /** The inventory being looted. */
-    @Getter private final Inventory lootInventory;
+    @Getter private Inventory lootInventory;
 
     /**
-     * Constructs a new InventoryModel.
+     * Sets the player inventory.
      *
      * @param playerInventory
-     *          The player's inventory.
+     *          The new player inventory.
      */
-    public InventoryModel(final Inventory playerInventory) {
+    public void setPlayerInventory(final Inventory playerInventory) {
         if (playerInventory == null) {
-            this.playerInventory = EMPTY_INVENTORY;
+            this.playerInventory = new Inventory(MAX_INVENTORY_SIZE);
         } else {
             this.playerInventory = playerInventory;
         }
-
-        lootInventory = EMPTY_INVENTORY;
     }
 
     /**
-     * Constructs a new InventoryModel.
-     *
-     * @param playerInventory
-     *          The player's inventory.
+     * Sets the loot inventory.
      *
      * @param lootInventory
-     *          The inventory being looted.
+     *          The new loot inventory.
      */
-    public InventoryModel(final Inventory playerInventory, final Inventory lootInventory) {
-        if (playerInventory == null) {
-            this.playerInventory = EMPTY_INVENTORY;
-        } else {
-            this.playerInventory = playerInventory;
-        }
-
+    public void setLootInventory(final Inventory lootInventory) {
         if (lootInventory == null) {
-            this.lootInventory = EMPTY_INVENTORY;
+            this.lootInventory = new Inventory(MAX_INVENTORY_SIZE);
         } else {
             this.lootInventory = lootInventory;
         }
