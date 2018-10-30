@@ -75,6 +75,7 @@ public class MoveAction extends Action {
         if (map.isPositionFree(newPosition)) {
             super.perform(controller, self);
             self.getTiles().setPosition(newPosition);
+            self.setBoundingBoxOrigin(newPosition.x, newPosition.y);
 
             if (self instanceof Player) {
                 final LineOfSight los = self.getLineOfSight();
