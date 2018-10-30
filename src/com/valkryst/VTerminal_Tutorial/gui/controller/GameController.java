@@ -89,7 +89,6 @@ public class GameController extends Controller<GameView, GameModel> {
 
                     // Check if an entity was clicked.
                     for (final Entity entity : map.getEntities()) {
-
                         if (entity.intersects(mousePos)) {
                             view.displayTargetInformation(entity);
                             return;
