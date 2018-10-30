@@ -52,7 +52,7 @@ public class GameView extends View {
         final Entity enemy = new Entity(Sprite.ENEMY, new Point(15, 12), "Gary");
 
         displayPlayerInformation(player);
-        displayTargetInformation(enemy);
+        displayTargetInformation(null);
 
         map.getEntities().add(enemy);
         this.addComponent(map);
@@ -96,7 +96,7 @@ public class GameView extends View {
      */
     public void displayPlayerInformation(final Player player) {
         // Set the information panel.
-        Layer layer = Entity.getInformationPanel(player);
+        Layer layer = player.getInformationPanel();
         layer.getTiles().setPosition(80, 0);
 
         if (playerInfoView != null) {
@@ -126,7 +126,7 @@ public class GameView extends View {
             rectanglePrinter.setTitle("No Target");
             rectanglePrinter.print(layer.getTiles(), new Point(0, 0));
         } else {
-            layer = Entity.getInformationPanel(entity);
+            layer = entity.getInformationPanel();
         }
 
         layer.getTiles().setPosition(80, 8);
