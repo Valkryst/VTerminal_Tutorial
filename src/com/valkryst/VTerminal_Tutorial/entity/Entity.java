@@ -262,60 +262,57 @@ public class Entity extends Layer {
     }
 
     /**
-     * Constructs an information panel, containing a number of important statistics, for an entity.
-     *
-     * @param entity
-     *          The entity.
+     * Constructs an information panel, containing a number of important statistics, for the entity.
      *
      * @return
      *          The layer containing all of the information.
      */
-    public static Layer getInformationPanel(final Entity entity) {
+    public Layer getInformationPanel() {
         final Layer layer = new Layer(new Dimension(40, 8));
 
         // Print border
         final RectanglePrinter rectanglePrinter = new RectanglePrinter();
         rectanglePrinter.setWidth(40);
         rectanglePrinter.setHeight(8);
-        rectanglePrinter.setTitle(entity.getName());
+        rectanglePrinter.setTitle(this.getName());
         rectanglePrinter.print(layer.getTiles(), new Point(0, 0));
 
         // Color name on the border
-        final Color color = entity.getSprite().getForegroundColor();
-        final Tile[] nameTiles = layer.getTiles().getRowSubset(0, 2, entity.getName().length());
+        final Color color = sprite.getForegroundColor();
+        final Tile[] nameTiles = layer.getTiles().getRowSubset(0, 2, name.length());
 
         for (final Tile tile : nameTiles) {
             tile.setForegroundColor(color);
         }
 
         // Retrieve Stats
-        final BoundStat health = (BoundStat) entity.getStat("Health");
-        final BoundStat level = (BoundStat) entity.getStat("Level");
-        final BoundStat experience = (BoundStat) entity.getStat("Experience");
+        final BoundStat health = (BoundStat) this.getStat("Health");
+        final BoundStat level = (BoundStat) this.getStat("Level");
+        final BoundStat experience = (BoundStat) this.getStat("Experience");
 
         // Create runnable functions, used to add/update labels.
         final Runnable add_level = () -> {
-            layer.getComponentsByID(entity.getName() + "-" + level.getName()).forEach(layer::removeComponent);
+            layer.getComponentsByID(name + "-" + level.getName()).forEach(layer::removeComponent);
 
             final Label label = level.getLabel();
-            label.setId(entity.getName() + "-" + label.getId());
+            label.setId(name + "-" + label.getId());
             label.getTiles().setPosition(1, 1);
 
             layer.addComponent(label);
         };
 
         final Runnable add_xp = () -> {
-            layer.getComponentsByID(entity.getName() + "-" + experience.getName()).forEach(layer::removeComponent);
+            layer.getComponentsByID(name + "-" + experience.getName()).forEach(layer::removeComponent);
 
             final Label label = experience.getBoundLabel();
-            label.setId(entity.getName() + "-" + label.getId());
+            label.setId(name + "-" + label.getId());
             label.getTiles().setPosition(1, 2);
 
             layer.addComponent(label);
         };
 
         final Runnable add_health = () -> {
-            layer.getComponentsByID(entity.getName() + "-" + health.getName()).forEach(layer::removeComponent);
+            layer.getComponentsByID(name + "-" + health.getName()).forEach(layer::removeComponent);
 
             final Label label;
 
@@ -329,7 +326,7 @@ public class Entity extends Layer {
                 label = builder.build();
             }
 
-            label.setId(entity.getName() + "-" + label.getId());
+            label.setId(name + "-" + label.getId());
 
             layer.addComponent(label);
         };
