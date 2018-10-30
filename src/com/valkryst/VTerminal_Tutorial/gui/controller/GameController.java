@@ -15,6 +15,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 public class GameController extends Controller<GameView, GameModel> {
     /** The timer which runs the game loop. */
@@ -62,6 +64,48 @@ public class GameController extends Controller<GameView, GameModel> {
      */
     private void initializeEventHandlers(final Screen screen) {
         final Player player = super.model.getPlayer();
+
+        final MouseListener mouseListener = new MouseListener() {
+            @Override
+            public void mouseClicked(final MouseEvent e) {}
+
+            @Override
+            public void mousePressed(final MouseEvent e) {}
+
+            @Override
+            public void mouseReleased(final MouseEvent e) {
+                if (e.getButton() == MouseEvent.BUTTON1) {
+                    final Point mousePos = screen.getMousePosition();
+                    final Map map = model.getMap();
+
+                    // Check if the click was outside the map area.
+                    if (mousePos.x < 0 || mousePos.x >= map.getViewWidth()) {
+                        return;
+                    }
+
+                    if (mousePos.y < 0 || mousePos.y >= map.getViewHeight()) {
+                        return;
+                    }
+
+                    // Check if an entity was clicked.
+                    for (final Entity entity : map.getEntities()) {
+
+                        if (entity.intersects(mousePos)) {
+                            view.displayTargetInformation(entity);
+                            return;
+                        }
+                    }
+
+                    view.displayTargetInformation(null);
+                }
+            }
+
+            @Override
+            public void mouseEntered(final MouseEvent e) {}
+
+            @Override
+            public void mouseExited(final MouseEvent e) {}
+        };
 
         final KeyListener keyListener = new KeyListener() {
             @Override
@@ -132,6 +176,7 @@ public class GameController extends Controller<GameView, GameModel> {
             }
         };
 
+        super.getModel().getEventListeners().add(mouseListener);
         super.getModel().getEventListeners().add(keyListener);
     }
 
