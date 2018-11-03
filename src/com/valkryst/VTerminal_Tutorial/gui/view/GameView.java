@@ -63,16 +63,6 @@ public class GameView extends View {
         this.addComponent(enemy);
 
         this.addComponent(messageBox);
-
-        // Add Equipment to Player
-        final Equipment sword = new Equipment("Sword", "A Sword", null, EquipmentSlot.MAIN_HAND);
-        sword.addStat(new BoundStat("Damage", 1, 10));
-        player.getInventory().equip(sword);
-
-        // Add Armor to Target
-        final Equipment shield = new Equipment("Shield", "A Shield", null, EquipmentSlot.OFF_HAND);
-        shield.addStat(new Stat("Armor", 3));
-        enemy.getInventory().equip(shield);
     }
 
     /** Initializes the components. */
