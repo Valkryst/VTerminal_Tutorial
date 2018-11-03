@@ -1,7 +1,6 @@
 package com.valkryst.VTerminal_Tutorial.item;
 
 import com.valkryst.VDice.DiceRoller;
-import com.valkryst.VTerminal_Tutorial.Sprite;
 import com.valkryst.VTerminal_Tutorial.statistic.BoundStat;
 import com.valkryst.VTerminal_Tutorial.statistic.Stat;
 import lombok.Getter;
@@ -15,9 +14,6 @@ public class Equipment extends Item {
     /**
      * Constructs a new piece of Equipment.
      *
-     * @param sprite
-     *          The sprite.
-     *
      * @param name
      *          The name.
      *
@@ -30,8 +26,8 @@ public class Equipment extends Item {
      * @param slot
      *          The slot in which this item can be equipped.
      */
-    public Equipment(final Sprite sprite, final String name, final String description, final HashMap<String, Stat> stats, final EquipmentSlot slot) {
-        super(sprite, name, description, stats);
+    public Equipment(final String name, final String description, final HashMap<String, Stat> stats, final EquipmentSlot slot) {
+        super(name, description, stats);
         this.slot = (slot == null ? EquipmentSlot.UNKNOWN : slot);
     }
 

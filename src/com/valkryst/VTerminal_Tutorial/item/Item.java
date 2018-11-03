@@ -1,15 +1,11 @@
 package com.valkryst.VTerminal_Tutorial.item;
 
-import com.valkryst.VTerminal_Tutorial.Sprite;
 import com.valkryst.VTerminal_Tutorial.statistic.Stat;
 import lombok.Getter;
 
 import java.util.HashMap;
 
 public class Item {
-    /** The sprite. */
-    @Getter private final Sprite sprite;
-
     /** The name. */
     @Getter private final String name;
 
@@ -22,9 +18,6 @@ public class Item {
     /**
      * Constructs a new Item.
      *
-     * @param sprite
-     *          The sprite.
-     *
      * @param name
      *          The name.
      *
@@ -34,9 +27,7 @@ public class Item {
      * @param stats
      *          The stats.
      */
-    public Item(final Sprite sprite, final String name, final String description, final HashMap<String, Stat> stats) {
-        this.sprite = (sprite == null ? Sprite.UNKNOWN : sprite);
-
+    public Item(final String name, final String description, final HashMap<String, Stat> stats) {
         this.name = (name == null || name.isEmpty() ? "Unknown" : name);
 
         this.description = (description == null || description.isEmpty() ? "" : description);
