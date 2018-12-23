@@ -9,11 +9,9 @@ import com.valkryst.VTerminal_Tutorial.Map;
 import com.valkryst.VTerminal_Tutorial.Sprite;
 import com.valkryst.VTerminal_Tutorial.entity.Entity;
 import com.valkryst.VTerminal_Tutorial.entity.Player;
+import com.valkryst.VTerminal_Tutorial.generator.EquipmentGenerator;
 import com.valkryst.VTerminal_Tutorial.gui.model.GameModel;
-import com.valkryst.VTerminal_Tutorial.item.Equipment;
-import com.valkryst.VTerminal_Tutorial.item.EquipmentSlot;
-import com.valkryst.VTerminal_Tutorial.statistic.BoundStat;
-import com.valkryst.VTerminal_Tutorial.statistic.Stat;
+import com.valkryst.VTerminal_Tutorial.enums.EquipmentSlot;
 import lombok.Getter;
 
 import java.awt.*;
@@ -63,6 +61,12 @@ public class GameView extends View {
         this.addComponent(enemy);
 
         this.addComponent(messageBox);
+
+        // Generate Equipment for Player
+        for (final EquipmentSlot slot : EquipmentSlot.values()) {
+            final EquipmentGenerator equipmentGenerator = new EquipmentGenerator(1, slot);
+            player.getInventory().equip(equipmentGenerator.generate());
+        }
     }
 
     /** Initializes the components. */
