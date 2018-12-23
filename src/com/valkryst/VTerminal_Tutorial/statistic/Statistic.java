@@ -2,14 +2,15 @@ package com.valkryst.VTerminal_Tutorial.statistic;
 
 import com.valkryst.VTerminal.builder.LabelBuilder;
 import com.valkryst.VTerminal.component.Label;
+import com.valkryst.VTerminal_Tutorial.enums.Stat;
 import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Stat {
-    /** The name. */
-    @Getter private final String name;
+public class Statistic {
+    /** The type. */
+    @Getter private final Stat type;
 
     /** The value. */
     @Getter private int value;
@@ -20,18 +21,14 @@ public class Stat {
     /**
      * Constructs a new Stat.
      *
-     * @param name
-     *        The name.
+     * @param type
+     *          The type.
      *
      * @param value
-     *        The value.
+     *          The value.
      */
-    public Stat(String name, final int value) {
-        if (name.isEmpty()) {
-            name = "Undefined";
-        }
-
-        this.name = name;
+    public Statistic(final Stat type, final int value) {
+        this.type = type;
         this.value = value;
     }
 
@@ -47,10 +44,10 @@ public class Stat {
      */
     public Label getLabel() {
         final LabelBuilder labelBuilder = new LabelBuilder();
-        labelBuilder.setText(name + ": " + value);
+        labelBuilder.setText(type.getName() + ": " + value);
 
         final Label label = labelBuilder.build();
-        label.setId(name);
+        label.setId(type.getName());
 
         return label;
     }

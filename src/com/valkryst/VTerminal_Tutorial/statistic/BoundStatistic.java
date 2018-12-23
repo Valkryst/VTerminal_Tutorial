@@ -2,9 +2,10 @@ package com.valkryst.VTerminal_Tutorial.statistic;
 
 import com.valkryst.VTerminal.builder.LabelBuilder;
 import com.valkryst.VTerminal.component.Label;
+import com.valkryst.VTerminal_Tutorial.enums.Stat;
 import lombok.Getter;
 
-public class BoundStat extends Stat {
+public class BoundStatistic extends Statistic {
     /** The minimum value. */
     @Getter private int minValue;
 
@@ -12,24 +13,24 @@ public class BoundStat extends Stat {
     @Getter private int maxValue;
 
     /**
-     * Constructs a new BoundStat.
+     * Constructs a new BoundStatistic.
      *
      * If the max value is less than the min value, then it is set to the min value.
      *
-     * @param name
-     *        The name.
+     * @param type
+     *          The type.
      *
      * @param value
-     *        The value.
+     *          The value.
      *
      * @param minValue
-     *        The minimum value.
+     *          The minimum value.
      *
      * @param maxValue
-     *        The maximum value.
+     *          The maximum value.
      */
-    public BoundStat(final String name, final int value, final int minValue, int maxValue) {
-        super(name, value);
+    public BoundStatistic(final Stat type, final int value, final int minValue, int maxValue) {
+        super(type, value);
 
         if (maxValue < minValue) {
             maxValue = minValue;
@@ -40,23 +41,23 @@ public class BoundStat extends Stat {
     }
 
     /**
-     * Constructs a new BoundStat.
+     * Constructs a new BoundStatistic.
      *
      * If the max value is less than the min value, then it is set to the min value.
      *
      * The value is automatically set to the maximum value.
      *
-     * @param name
-     *        The name.
+     * @param type
+     *          The type.
      *
      * @param minValue
-     *        The minimum value.
+     *          The minimum value.
      *
      * @param maxValue
-     *        The maximum value.
+     *          The maximum value.
      */
-    public BoundStat(final String name, final int minValue, final int maxValue) {
-        this(name, maxValue, minValue, maxValue);
+    public BoundStatistic(final Stat type, final int minValue, final int maxValue) {
+        this(type, maxValue, minValue, maxValue);
     }
 
     /**
@@ -71,10 +72,10 @@ public class BoundStat extends Stat {
      */
     public Label getBoundLabel() {
         final LabelBuilder labelBuilder = new LabelBuilder();
-        labelBuilder.setText(super.getName() + ": " + super.getValue() + "/" + maxValue);
+        labelBuilder.setText(super.getType().getName() + ": " + super.getValue() + "/" + maxValue);
 
         final Label label = labelBuilder.build();
-        label.setId(super.getName());
+        label.setId(super.getType().getName());
 
         return label;
     }
