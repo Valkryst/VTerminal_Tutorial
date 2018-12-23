@@ -1,8 +1,11 @@
 package com.valkryst.VTerminal_Tutorial.item;
 
-import com.valkryst.VTerminal_Tutorial.statistic.Stat;
+import com.valkryst.VTerminal.component.Layer;
+import com.valkryst.VTerminal_Tutorial.enums.Stat;
+import com.valkryst.VTerminal_Tutorial.statistic.Statistic;
 import lombok.Getter;
 
+import java.awt.*;
 import java.util.HashMap;
 
 public class Item {
@@ -13,7 +16,7 @@ public class Item {
     @Getter private final String description;
 
     /** The stats. */
-    private final HashMap<String, Stat> stats;
+    private final HashMap<Stat, Statistic> stats;
 
     /**
      * Constructs a new Item.
@@ -27,11 +30,9 @@ public class Item {
      * @param stats
      *          The stats.
      */
-    public Item(final String name, final String description, final HashMap<String, Stat> stats) {
+    public Item(final String name, final String description, final HashMap<Stat, Statistic> stats) {
         this.name = (name == null || name.isEmpty() ? "Unknown" : name);
-
         this.description = (description == null || description.isEmpty() ? "" : description);
-
         this.stats = (stats == null ? new HashMap<>() : stats);
     }
 
@@ -41,9 +42,9 @@ public class Item {
      * @param stat
      *          The stat.
      */
-    public void addStat(final Stat stat) {
+    public void addStat(final Statistic stat) {
         if (stat != null) {
-            stats.putIfAbsent(stat.getName().toLowerCase(), stat);
+            stats.putIfAbsent(stat.getType(), stat);
         }
     }
 
@@ -60,21 +61,31 @@ public class Item {
     }
 
     /**
-     * Retrieves a stat, by name, from the item.
+     * Retrieves a stat, by type, from the item.
      *
-     * @param name
-     *          The name of the stat.
+     * @param type
+     *          The type of the stat.
      *
      * @return
      *          The stat.
-     *          If the name is null, then null is returned.
-     *          If the item has no stat that uses the specified name, then null is returned.
+     *          If the type is null, then null is returned.
+     *          If the item has no stat that uses the specified type, then null is returned.
      */
-    public Stat getStat(final String name) {
-        if (name == null) {
+    public Statistic getStat(final Stat type) {
+        if (type == null) {
             return null;
         }
 
-        return stats.get(name.toLowerCase());
+        return stats.get(type);
+    }
+
+    /**
+     * Constructs an information panel, containing a number of important statistics, for the item.
+     *
+     * @return
+     *          The layer containing all of the information.
+     */
+    public Layer getInformationPanel() {
+        return new Layer(new Dimension(39, 38));
     }
 }
