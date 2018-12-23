@@ -3,11 +3,12 @@ package com.valkryst.VTerminal_Tutorial.action;
 import com.valkryst.VDice.DiceRoller;
 import com.valkryst.VTerminal_Tutorial.Message;
 import com.valkryst.VTerminal_Tutorial.entity.Entity;
+import com.valkryst.VTerminal_Tutorial.enums.Stat;
 import com.valkryst.VTerminal_Tutorial.gui.controller.GameController;
 import com.valkryst.VTerminal_Tutorial.item.Equipment;
-import com.valkryst.VTerminal_Tutorial.item.EquipmentSlot;
+import com.valkryst.VTerminal_Tutorial.enums.EquipmentSlot;
 import com.valkryst.VTerminal_Tutorial.item.Inventory;
-import com.valkryst.VTerminal_Tutorial.statistic.BoundStat;
+import com.valkryst.VTerminal_Tutorial.statistic.BoundStatistic;
 
 public class AttackAction extends Action {
     /** The target. */
@@ -43,7 +44,7 @@ public class AttackAction extends Action {
         if (actionRoll == 1) {
             damage = calculateDamage(self, self);
 
-            final BoundStat health = (BoundStat) self.getStat("Health");
+            final BoundStatistic health = (BoundStatistic) self.getStat(Stat.HEALTH);
             health.setValue(health.getValue() - damage);
 
             controller.displayMessage(getCriticalMissMessage(self, damage));
@@ -79,7 +80,7 @@ public class AttackAction extends Action {
             message = getCriticalAttackMessage(self, damage);
         }
 
-        final BoundStat health = (BoundStat) target.getStat("Health");
+        final BoundStatistic health = (BoundStatistic) target.getStat(Stat.HEALTH);
 
         if (damage > 0) {
             health.setValue(health.getValue() - damage);
