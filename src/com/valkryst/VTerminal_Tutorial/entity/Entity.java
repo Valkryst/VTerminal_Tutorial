@@ -9,10 +9,11 @@ import com.valkryst.VTerminal_Tutorial.LineOfSight;
 import com.valkryst.VTerminal_Tutorial.Sprite;
 import com.valkryst.VTerminal_Tutorial.action.Action;
 import com.valkryst.VTerminal_Tutorial.action.MoveAction;
+import com.valkryst.VTerminal_Tutorial.enums.Stat;
 import com.valkryst.VTerminal_Tutorial.gui.controller.GameController;
 import com.valkryst.VTerminal_Tutorial.item.Inventory;
-import com.valkryst.VTerminal_Tutorial.statistic.BoundStat;
-import com.valkryst.VTerminal_Tutorial.statistic.Stat;
+import com.valkryst.VTerminal_Tutorial.statistic.BoundStatistic;
+import com.valkryst.VTerminal_Tutorial.statistic.Statistic;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -29,7 +30,7 @@ public class Entity extends Layer {
     @Getter @Setter private String name;
 
     /** The stats. */
-    private final HashMap<String, Stat> stats = new HashMap<>();
+    private final HashMap<Stat, Statistic> stats = new HashMap<>();
 
     /** The inventory. */
     @Getter private Inventory inventory = new Inventory(26);
@@ -60,12 +61,7 @@ public class Entity extends Layer {
      */
     public Entity(final Sprite sprite, final Point position, final String name) {
         super(new Dimension(1, 1));
-
-        if (sprite == null) {
-            setSprite(Sprite.UNKNOWN);
-        } else {
-            setSprite(sprite);
-        }
+        setSprite((sprite == null ? Sprite.UNKNOWN : sprite));
 
         if (position == null || position.x < 0 || position.y < 0) {
             super.getTiles().setPosition(new Point(0, 0));
@@ -81,10 +77,9 @@ public class Entity extends Layer {
 
         lineOfSight = new LineOfSight(4, position);
 
-        // Set Core Stats
-        final BoundStat health = new BoundStat("Health", 0, 100);
-        final BoundStat level = new BoundStat("Level", 1, 1, 60);
-        final BoundStat experience = new BoundStat("Experience", 0, 0, 100);
+        final BoundStatistic health = new BoundStatistic(Stat.HEALTH, 0, 100);
+        final BoundStatistic level = new BoundStatistic(Stat.LEVEL, 1, 1, 60);
+        final BoundStatistic experience = new BoundStatistic(Stat.EXPERIENCE, 0, 0, 100);
 
         addStat(health);
         addStat(level);
@@ -116,12 +111,7 @@ public class Entity extends Layer {
      */
     public Entity(final Sprite sprite, final Point position, final String name, final Inventory inventory) {
         this(sprite, position, name);
-
-        if (inventory == null) {
-            this.inventory = new Inventory(26);
-        } else {
-            this.inventory = inventory;
-        }
+        this.inventory = (inventory == null ? new Inventory(26) : inventory);
     }
 
     /**
@@ -158,26 +148,26 @@ public class Entity extends Layer {
      * @param stat
      *          The stat.
      */
-    public void addStat(final Stat stat) {
+    public void addStat(final Statistic stat) {
         if (stat == null) {
             return;
         }
 
-        stats.putIfAbsent(stat.getName().toLowerCase(), stat);
+        stats.putIfAbsent(stat.getType(), stat);
     }
 
     /**
-     * Removes a stat, by name, from the entity.
+     * Removes a stat, by type, from the entity.
      *
-     * @param name
-     *          The name of the stat.
+     * @param type
+     *          The type of the stat.
      */
-    public void removeStat(final String name) {
-        if (name == null) {
+    public void removeStat(final Stat type) {
+        if (type == null) {
             return;
         }
 
-        stats.remove(name.toLowerCase());
+        stats.remove(type);
     }
 
     /**
@@ -243,22 +233,22 @@ public class Entity extends Layer {
     }
 
     /**
-     * Retrieves a stat, by name, from the entity.
+     * Retrieves a stat, by type, from the entity.
      *
-     * @param name
-     *          The name of the stat.
+     * @param type
+     *          The type of the stat.
      *
      * @return
      *          The stat.
-     *          If the name is null, then null is returned.
-     *          If the entity has no stat that uses the specified name, then null is returned.
+     *          If the type is null, then null is returned.
+     *          If the entity has no stat that uses the specified type, then null is returned.
      */
-    public Stat getStat(final String name) {
-        if (name == null) {
+    public Statistic getStat(final Stat type) {
+        if (type == null) {
             return null;
         }
 
-        return stats.get(name.toLowerCase());
+        return stats.get(type);
     }
 
     /**
@@ -285,14 +275,14 @@ public class Entity extends Layer {
             tile.setForegroundColor(color);
         }
 
-        // Retrieve Stats
-        final BoundStat health = (BoundStat) this.getStat("Health");
-        final BoundStat level = (BoundStat) this.getStat("Level");
-        final BoundStat experience = (BoundStat) this.getStat("Experience");
+        // Retrieve Stat
+        final BoundStatistic health = (BoundStatistic) this.getStat(Stat.HEALTH);
+        final BoundStatistic level = (BoundStatistic) this.getStat(Stat.LEVEL);
+        final BoundStatistic experience = (BoundStatistic) this.getStat(Stat.EXPERIENCE);
 
         // Create runnable functions, used to add/update labels.
         final Runnable add_level = () -> {
-            layer.getComponentsByID(name + "-" + level.getName()).forEach(layer::removeComponent);
+            layer.getComponentsByID(name + "-" + Stat.LEVEL.getName()).forEach(layer::removeComponent);
 
             final Label label = level.getLabel();
             label.setId(name + "-" + label.getId());
@@ -302,7 +292,7 @@ public class Entity extends Layer {
         };
 
         final Runnable add_xp = () -> {
-            layer.getComponentsByID(name + "-" + experience.getName()).forEach(layer::removeComponent);
+            layer.getComponentsByID(name + "-" + Stat.EXPERIENCE.getName()).forEach(layer::removeComponent);
 
             final Label label = experience.getBoundLabel();
             label.setId(name + "-" + label.getId());
@@ -312,7 +302,7 @@ public class Entity extends Layer {
         };
 
         final Runnable add_health = () -> {
-            layer.getComponentsByID(name + "-" + health.getName()).forEach(layer::removeComponent);
+            layer.getComponentsByID(name + "-" + Stat.HEALTH.getName()).forEach(layer::removeComponent);
 
             final Label label;
 
