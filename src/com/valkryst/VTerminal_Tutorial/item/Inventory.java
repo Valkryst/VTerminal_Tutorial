@@ -1,5 +1,7 @@
 package com.valkryst.VTerminal_Tutorial.item;
 
+import com.valkryst.VTerminal_Tutorial.enums.EquipmentSlot;
+
 import java.util.Arrays;
 import java.util.HashMap;
 
