@@ -4,16 +4,20 @@ import com.valkryst.VTerminal.Screen;
 import com.valkryst.VTerminal.builder.ButtonBuilder;
 import com.valkryst.VTerminal.builder.LabelBuilder;
 import com.valkryst.VTerminal.builder.RadioButtonBuilder;
-import com.valkryst.VTerminal.builder.TextAreaBuilder;
 import com.valkryst.VTerminal.component.Layer;
 import com.valkryst.VTerminal.component.RadioButtonGroup;
-import com.valkryst.VTerminal.component.TextArea;
 import com.valkryst.VTerminal.printer.RectanglePrinter;
+import com.valkryst.VTerminal_Tutorial.entity.Player;
+import com.valkryst.VTerminal_Tutorial.enums.Rarity;
+import com.valkryst.VTerminal_Tutorial.enums.Stat;
 import com.valkryst.VTerminal_Tutorial.gui.model.InventoryModel;
+import com.valkryst.VTerminal_Tutorial.gui.palette.rarity.UnknownColorPalette;
 import com.valkryst.VTerminal_Tutorial.item.Equipment;
-import com.valkryst.VTerminal_Tutorial.item.EquipmentSlot;
+import com.valkryst.VTerminal_Tutorial.enums.EquipmentSlot;
 import com.valkryst.VTerminal_Tutorial.item.Inventory;
 import com.valkryst.VTerminal_Tutorial.item.Item;
+import com.valkryst.VTerminal_Tutorial.statistic.BoundStatistic;
+import com.valkryst.VTerminal_Tutorial.statistic.Statistic;
 
 import java.awt.*;
 
@@ -31,9 +35,61 @@ public class InventoryView extends View {
     private Layer inventoryLayer;
     /** The layer displaying any lootable items. */
     private Layer lootLayer;
+    /** The layer displaying the inspected item. */
+    private Layer inspectionLayer;
+    /** The layer displaying the player's stats. */
+    private Layer statsLayer;
 
-    /** The message box to display item information. */
-    private TextArea messageBox;
+    /**
+     * The border dimensions of each layer.
+     *
+     * 0 - Equipment Layer
+     * 1 - Inventory Layer
+     * 2 - Loot Layer
+     * 3 - Inspection Layer
+     * 4 - Stats Layer
+     */
+    private final static Dimension[] LAYER_BORDER_DIMENSIONS = new Dimension[] {
+            new Dimension(80, 10),
+            new Dimension(41, 30),
+            new Dimension(40, 30),
+            new Dimension(41, 39),
+            new Dimension(80, 7)
+    };
+
+    /**
+     * The inner dimensions of each layer.
+     *
+     * 0 - Equipment Layer
+     * 1 - Inventory Layer
+     * 2 - Loot Layer
+     * 3 - Inspection Layer
+     * 4 - Stats Layer
+     */
+    private final static Dimension[] LAYER_INNER_DIMENSIONS = new Dimension[] {
+            new Dimension(LAYER_BORDER_DIMENSIONS[0].width - 2, LAYER_BORDER_DIMENSIONS[0].height - 2),
+            new Dimension(LAYER_BORDER_DIMENSIONS[1].width - 2, LAYER_BORDER_DIMENSIONS[1].height - 2),
+            new Dimension(LAYER_BORDER_DIMENSIONS[2].width - 2, LAYER_BORDER_DIMENSIONS[2].height - 2),
+            new Dimension(LAYER_BORDER_DIMENSIONS[3].width - 2, LAYER_BORDER_DIMENSIONS[3].height - 2),
+            new Dimension(LAYER_BORDER_DIMENSIONS[4].width - 2, LAYER_BORDER_DIMENSIONS[4].height - 2),
+    };
+
+    /**
+     * The origin points of each layer.
+     *
+     * 0 - Equipment Layer
+     * 1 - Inventory Layer
+     * 2 - Loot Layer
+     * 3 - Inspection Layer
+     * 4 - Stats Layer
+     */
+    private final static Point[] LAYER_POSITIONS = new Point[] {
+        new Point(0, 0),
+        new Point(0, LAYER_BORDER_DIMENSIONS[0].height - 1),
+        new Point(LAYER_BORDER_DIMENSIONS[1].width - 1, LAYER_BORDER_DIMENSIONS[0].height - 1),
+        new Point(LAYER_BORDER_DIMENSIONS[0].width - 1, 0),
+        new Point(0, LAYER_BORDER_DIMENSIONS[3].height - 1)
+    };
 
     /**
      * Constructs a new InventoryView.
@@ -48,53 +104,61 @@ public class InventoryView extends View {
 
     /** Initializes the components. */
     private void initializeComponents() {
-        // Section Borders
         final RectanglePrinter printer = new RectanglePrinter();
         printer.setTitle("Equipment");
-        printer.setWidth(80);
-        printer.setHeight(11);
-        printer.print(this.getTiles(), new Point(0, 0));
+        printer.setWidth(LAYER_BORDER_DIMENSIONS[0].width);
+        printer.setHeight(LAYER_BORDER_DIMENSIONS[0].height);
+        printer.print(this.getTiles(), LAYER_POSITIONS[0]);
 
         printer.setTitle("Inventory");
-        printer.setWidth(41);
-        printer.setHeight(30);
-        printer.print(this.getTiles(), new Point(0, 10));
+        printer.setWidth(LAYER_BORDER_DIMENSIONS[1].width);
+        printer.setHeight(LAYER_BORDER_DIMENSIONS[1].height);
+        printer.print(this.getTiles(), LAYER_POSITIONS[1]);
 
         printer.setTitle("Loot");
-        printer.setWidth(40);
-        printer.setHeight(30);
-        printer.print(this.getTiles(), new Point(40, 10));
+        printer.setWidth(LAYER_BORDER_DIMENSIONS[2].width);
+        printer.setHeight(LAYER_BORDER_DIMENSIONS[2].height);
+        printer.print(this.getTiles(), LAYER_POSITIONS[2]);
 
-        // Message Box
-        final TextAreaBuilder builder = new TextAreaBuilder();
-        builder.setPosition(0, 40);
-        builder.setWidth(80);
-        builder.setHeight(5);
+        printer.setTitle(""); // Inspection Layer Border
+        printer.setWidth(LAYER_BORDER_DIMENSIONS[3].width);
+        printer.setHeight(LAYER_BORDER_DIMENSIONS[3].height);
+        printer.print(this.getTiles(), LAYER_POSITIONS[3]);
 
-        builder.setEditable(false);
-
-        messageBox = builder.build();
-        this.addComponent(messageBox);
+        printer.setTitle("Stat");
+        printer.setWidth(LAYER_BORDER_DIMENSIONS[4].width);
+        printer.setHeight(LAYER_BORDER_DIMENSIONS[4].height);
+        printer.print(this.getTiles(), LAYER_POSITIONS[4]);
     }
 
     /**
      * Adds components, that require data from the model, to the view.
      *
+     * @param player
+     *          The player entity.
+     *
      * @param model
      *          The model.
      */
-    public void addModelComponents(final InventoryModel model) {
-        equipmentLayer = createEquipmentLayer(model);
-        inventoryLayer = createInventoryLayer(model);
-        lootLayer = createLootLayer(model);
+    public void addModelComponents(final Player player, final InventoryModel model) {
+        equipmentLayer = createEquipmentLayer(player, model);
+        inventoryLayer = createInventoryLayer(player, model);
+        lootLayer = createLootLayer(player, model);
+        inspectionLayer = createInspectionLayer(null);
+        statsLayer = createStatsLayer(player, model);
 
         this.addComponent(equipmentLayer);
         this.addComponent(inventoryLayer);
         this.addComponent(lootLayer);
+        this.addComponent(inspectionLayer);
+        this.addComponent(statsLayer);
     }
 
     /**
      * Creates the equipment layer.
+     *
+     * @param player
+     *          The player entity.
      *
      * @param model
      *          The inventory model containing the player's equipment.
@@ -102,15 +166,13 @@ public class InventoryView extends View {
      * @return
      *          The layer.
      */
-    private Layer createEquipmentLayer(final InventoryModel model) {
+    private Layer createEquipmentLayer(final Player player, final InventoryModel model) {
         // Create the Layer
-        final int width = 78;
-        final int height = 9;
         Layer layer = equipmentLayer;
 
         if (layer == null) {
-            layer = new Layer(new Dimension(width, height));
-            layer.getTiles().setPosition(1, 1);
+            layer = new Layer(LAYER_INNER_DIMENSIONS[0]);
+            layer.getTiles().setPosition(LAYER_POSITIONS[0].x + 1, LAYER_POSITIONS[0].y + 1);
         } else {
             layer.removeAllComponents();
         }
@@ -135,7 +197,7 @@ public class InventoryView extends View {
         int column = 0;
 
         for (final EquipmentSlot slot : EquipmentSlot.values()) {
-            final Item item = inventory.getEquipment(slot);
+            final Equipment item = inventory.getEquipment(slot);
 
             /*
              * RadioButton components don't run their onClickFunction if they're already selected.
@@ -152,11 +214,11 @@ public class InventoryView extends View {
             radioButtonBuilder.setPosition(column, row);
             radioButtonBuilder.setGroup(radioButtonGroup);
             radioButtonBuilder.setOnClickFunction(() -> selectedEquipmentSlot = slot);
-
+            radioButtonBuilder.setColorPalette((item == null ? new UnknownColorPalette() : item.getRarity().getColorPalette()));
             layer.addComponent(radioButtonBuilder.build());
 
-            // We want each column of items to include 6 rows and have space for 40 tiles in-between columns.
-            if (row == 6) {
+            // We want each column of items to include 5 rows and have space for 40 tiles in-between columns.
+            if (row == 5) {
                 row = 0;
                 column += 40;
             } else {
@@ -168,12 +230,12 @@ public class InventoryView extends View {
         final ButtonBuilder buttonBuilder = new ButtonBuilder();
 
         buttonBuilder.setText("[Inspect]");
-        buttonBuilder.setPosition(0, height - 1);
+        buttonBuilder.setPosition(0, layer.getTiles().getHeight() - 1);
         buttonBuilder.setOnClickFunction(() -> {
             final Item item = inventory.getEquipment(selectedEquipmentSlot);
 
             if (item != null) {
-                messageBox.appendText(item.getDescription());
+                refreshInspectionLayer(item);
             }
         });
         layer.addComponent(buttonBuilder.build());
@@ -189,8 +251,9 @@ public class InventoryView extends View {
 
                 selectedEquipmentSlot = null;
 
-                refreshEquipmentLayer(model);
-                refreshInventoryLayer(model);
+                refreshEquipmentLayer(player, model);
+                refreshInventoryLayer(player, model);
+                refreshStatsLayer(player, model);
             }
         });
         layer.addComponent(buttonBuilder.build());
@@ -201,21 +264,22 @@ public class InventoryView extends View {
     /**
      * Creates the inventory layer.
      *
+     * @param player
+     *          The player entity.
+     *
      * @param model
      *          The inventory model containing the player's inventory.
      *
      * @return
      *          The layer.
      */
-    private Layer createInventoryLayer(final InventoryModel model) {
+    private Layer createInventoryLayer(final Player player, final InventoryModel model) {
         // Create the Layer
-        final int width = 38;
-        final int height = 28;
         Layer layer = inventoryLayer;
 
         if (layer == null) {
-            layer = new Layer(new Dimension(width, height));
-            layer.getTiles().setPosition(1, 11);
+            layer = new Layer(LAYER_INNER_DIMENSIONS[1]);
+            layer.getTiles().setPosition(LAYER_POSITIONS[1].x + 1, LAYER_POSITIONS[1].y + 1);
         } else {
             layer.removeAllComponents();
         }
@@ -256,6 +320,12 @@ public class InventoryView extends View {
             radioButtonBuilder.setGroup(radioButtonGroup);
             radioButtonBuilder.setOnClickFunction(() -> selectedInventoryItem = item);
 
+            if (item == null || item instanceof Equipment == false) {
+                radioButtonBuilder.setColorPalette(new UnknownColorPalette());
+            } else {
+                radioButtonBuilder.setColorPalette(((Equipment) item).getRarity().getColorPalette());
+            }
+
             layer.addComponent(radioButtonBuilder.build());
         }
 
@@ -263,10 +333,10 @@ public class InventoryView extends View {
         final ButtonBuilder buttonBuilder = new ButtonBuilder();
 
         buttonBuilder.setText("[Inspect]");
-        buttonBuilder.setPosition(0, height - 1);
+        buttonBuilder.setPosition(0, layer.getTiles().getHeight() - 1);
         buttonBuilder.setOnClickFunction(() -> {
             if (selectedInventoryItem != null) {
-                messageBox.appendText(selectedInventoryItem.getDescription());
+                refreshInspectionLayer(selectedInventoryItem);
             }
         });
         layer.addComponent(buttonBuilder.build());
@@ -284,8 +354,9 @@ public class InventoryView extends View {
 
             selectedInventoryItem = null;
 
-            refreshEquipmentLayer(model);
-            refreshInventoryLayer(model);
+            refreshEquipmentLayer(player, model);
+            refreshInventoryLayer(player, model);
+            refreshStatsLayer(player, model);
         });
         layer.addComponent(buttonBuilder.build());
 
@@ -305,8 +376,8 @@ public class InventoryView extends View {
 
             selectedInventoryItem = null;
 
-            refreshInventoryLayer(model);
-            refreshLootLayer(model);
+            refreshInventoryLayer(player, model);
+            refreshLootLayer(player, model);
         });
         layer.addComponent(buttonBuilder.build());
 
@@ -316,21 +387,22 @@ public class InventoryView extends View {
     /**
      * Creates the loot layer.
      *
+     * @param player
+     *          The player entity.
+     *
      * @param model
      *          The inventory model containing the loot.
      *
      * @return
      *          The layer.
      */
-    private Layer createLootLayer(final InventoryModel model) {
+    private Layer createLootLayer(final Player player, final InventoryModel model) {
         // Create the Layer
-        final int width = 38;
-        final int height = 28;
         Layer layer = lootLayer;
 
         if (layer == null) {
-            layer = new Layer(new Dimension(width, height));
-            layer.getTiles().setPosition(41, 11);
+            layer = new Layer(LAYER_INNER_DIMENSIONS[2]);
+            layer.getTiles().setPosition(LAYER_POSITIONS[2].x + 1, LAYER_POSITIONS[2].y + 1);
         } else {
             layer.removeAllComponents();
         }
@@ -371,6 +443,12 @@ public class InventoryView extends View {
             radioButtonBuilder.setGroup(radioButtonGroup);
             radioButtonBuilder.setOnClickFunction(() -> selectedLootItem = item);
 
+            if (item == null || item instanceof Equipment == false) {
+                radioButtonBuilder.setColorPalette(new UnknownColorPalette());
+            } else {
+                radioButtonBuilder.setColorPalette(((Equipment) item).getRarity().getColorPalette());
+            }
+
             layer.addComponent(radioButtonBuilder.build());
         }
 
@@ -378,10 +456,10 @@ public class InventoryView extends View {
         final ButtonBuilder buttonBuilder = new ButtonBuilder();
 
         buttonBuilder.setText("[Inspect]");
-        buttonBuilder.setPosition(0, height - 1);
+        buttonBuilder.setPosition(0, layer.getTiles().getHeight() - 1);
         buttonBuilder.setOnClickFunction(() -> {
             if (selectedLootItem != null) {
-                messageBox.appendText(selectedLootItem.getDescription());
+                refreshInspectionLayer(selectedLootItem);
             }
         });
         layer.addComponent(buttonBuilder.build());
@@ -402,10 +480,160 @@ public class InventoryView extends View {
 
             selectedLootItem = null;
 
-            refreshInventoryLayer(model);
-            refreshLootLayer(model);
+            refreshInventoryLayer(player, model);
+            refreshLootLayer(player, model);
         });
         layer.addComponent(buttonBuilder.build());
+
+        return layer;
+    }
+
+    /**
+     * Creates the inspection layer.
+     *
+     * @param item
+     *          The item being inspected.
+     *
+     * @return
+     *          The layer.
+     */
+    private Layer createInspectionLayer(final Item item) {
+        // Create the Layer
+        Layer layer = inspectionLayer;
+
+        if (layer == null) {
+            layer = new Layer(LAYER_INNER_DIMENSIONS[3]);
+            layer.getTiles().setPosition(LAYER_POSITIONS[3].x + 1, LAYER_POSITIONS[3].y + 1);
+        } else {
+            layer.removeAllComponents();
+        }
+
+        // Reset the foreground color of the tiles where the border's title will be.
+        for (int x = 79 ; x < this.getTiles().getWidth() ; x++) {
+            this.getTileAt(x, 0).setForegroundColor(Color.WHITE);
+        }
+
+        // Check for null item and re-print the border.
+        final RectanglePrinter printer = new RectanglePrinter();
+        printer.setWidth(LAYER_BORDER_DIMENSIONS[3].width);
+        printer.setHeight(LAYER_BORDER_DIMENSIONS[3].height);
+
+        if (item == null || item instanceof Equipment == false) {
+            printer.setTitle("");
+            printer.print(this.getTiles(), new Point(79, 0));
+
+            return layer;
+        }
+
+        printer.setTitle(item.getName());
+        printer.print(this.getTiles(), new Point(79, 0));
+
+        // Color the border's title to reflect the rarity of the item.
+        final Rarity rarity = ((Equipment) item).getRarity();
+        final Color foregroundColor = rarity.getColorPalette().getRadioButton_defaultForeground();
+
+        for (int x = 81; x < 81 + item.getName().length() ; x++) {
+            this.getTileAt(x, 0).setForegroundColor(foregroundColor);
+        }
+
+        // Add the item's information panel.
+        final Layer informationPanel = item.getInformationPanel();
+        informationPanel.getTiles().setPosition(0, 0);
+        layer.addComponent(informationPanel);
+
+        return layer;
+    }
+
+    /**
+     * Creates the stats layer.
+     *
+     * @param player
+     *          The player entity.
+     *
+     * @param model
+     *          The inventory model containing the player's equipment.
+     *
+     * @return
+     *          The layer.
+     */
+    private Layer createStatsLayer(final Player player, final InventoryModel model) {
+        // Create the Layer
+        Layer layer = statsLayer;
+
+        if (layer == null) {
+            layer = new Layer(LAYER_INNER_DIMENSIONS[4]);
+            layer.getTiles().setPosition(LAYER_POSITIONS[4].x + 1, LAYER_POSITIONS[4].y + 1);
+
+            layer.addComponent();
+        } else {
+            layer.removeAllComponents();
+        }
+
+        // Calculate Equipment Stat Totals
+        final Inventory inventory = model.getPlayerInventory();
+        final int[] statsMin = new int[Stat.values().length];
+        final int[] statsMax = new int[Stat.values().length];
+
+        if (inventory != null) {
+            for (final EquipmentSlot slot : EquipmentSlot.values()) {
+                final Equipment item = inventory.getEquipment(slot);
+
+                if (item == null) {
+                    continue;
+                }
+
+                for (final Stat stat : Stat.values()) {
+                    final Statistic temp = item.getStat(stat);
+
+                    if (temp != null) {
+                        if (temp instanceof BoundStatistic) {
+                            statsMin[stat.ordinal()] += ((BoundStatistic) temp).getMinValue();
+                            statsMax[stat.ordinal()] += ((BoundStatistic) temp).getMaxValue();
+                        } else {
+                            statsMin[stat.ordinal()] += temp.getValue();
+                            statsMax[stat.ordinal()] += temp.getValue();
+                        }
+                    }
+                }
+            }
+        }
+
+        // Calculate Player Stat Totals
+        statsMin[Stat.LEVEL.ordinal()] += player.getStat(Stat.LEVEL).getValue();
+        statsMax[Stat.LEVEL.ordinal()] += player.getStat(Stat.LEVEL).getValue();
+
+        statsMin[Stat.EXPERIENCE.ordinal()] += player.getStat(Stat.EXPERIENCE).getValue();
+        statsMax[Stat.EXPERIENCE.ordinal()] += player.getStat(Stat.EXPERIENCE).getValue();
+
+        statsMin[Stat.HEALTH.ordinal()] += player.getStat(Stat.HEALTH).getValue();
+        statsMax[Stat.HEALTH.ordinal()] += player.getStat(Stat.HEALTH).getValue();
+
+        // Display Stat Totals
+        final LabelBuilder labelBuilder = new LabelBuilder();
+
+        int row = 0;
+        int column = 0;
+
+        for (final Stat stat : Stat.values()) {
+            labelBuilder.reset();
+            labelBuilder.setPosition(column, row);
+
+            if (statsMin[stat.ordinal()] == statsMax[stat.ordinal()]) {
+                labelBuilder.setText(stat.getName() + ": " + statsMin[stat.ordinal()]);
+            } else {
+                labelBuilder.setText(stat.getName() + ": " + statsMin[stat.ordinal()] + "-" + statsMax[stat.ordinal()]);
+            }
+
+            layer.addComponent(labelBuilder.build());
+
+            // We want each column of items to include 5 rows and have space for 20 tiles in-between columns.
+            if (row == 5) {
+                row = 0;
+                column += 20;
+            } else {
+                row++;
+            }
+        }
 
         return layer;
     }
@@ -414,12 +642,15 @@ public class InventoryView extends View {
      * Refreshes the components of the equipment layer, so that it reflects the current state of the equipment
      * portion of the inventory.
      *
+     * @param player
+     *          The player entity.
+     *
      * @param model
      *          The inventory model containing the inventory which contains the equipment.
      */
-    public void refreshEquipmentLayer(final InventoryModel model) {
+    public void refreshEquipmentLayer(final Player player, final InventoryModel model) {
         this.removeComponent(equipmentLayer);
-        equipmentLayer = createEquipmentLayer(model);
+        equipmentLayer = createEquipmentLayer(player, model);
         this.addComponent(equipmentLayer);
     }
 
@@ -427,12 +658,15 @@ public class InventoryView extends View {
      * Refreshes the components of the inventory layer, so that it reflects the current state of the non-equipment
      * portion of the inventory.
      *
+     * @param player
+     *          The player entity.
+     *
      * @param model
      *          The inventory model containing the inventory
      */
-    public void refreshInventoryLayer(final InventoryModel model) {
+    public void refreshInventoryLayer(final Player player, final InventoryModel model) {
         this.removeComponent(inventoryLayer);
-        inventoryLayer = createInventoryLayer(model);
+        inventoryLayer = createInventoryLayer(player, model);
         this.addComponent(inventoryLayer);
     }
 
@@ -440,12 +674,42 @@ public class InventoryView extends View {
      * Refreshes the components of the loot inventory layer, so that it reflects the current state of the loot
      * inventory.
      *
+     * @param player
+     *          The player entity.
+     *
      * @param model
      *          The inventory model containing the loot.
      */
-    public void refreshLootLayer(final InventoryModel model) {
+    public void refreshLootLayer(final Player player, final InventoryModel model) {
         this.removeComponent(lootLayer);
-        lootLayer = createLootLayer(model);
+        lootLayer = createLootLayer(player, model);
         this.addComponent(lootLayer);
+    }
+
+    /**
+     * Refreshes the components of the inspection layer, so it displays the specified item.
+     *
+     * @param item
+     *          The item to display.
+     */
+    public void refreshInspectionLayer(final Item item) {
+        this.removeComponent(inspectionLayer);
+        inspectionLayer = createInspectionLayer(item);
+        this.addComponent(inspectionLayer);
+    }
+
+    /**
+     * Refreshes the components of the stats layer, so that it reflects the current stats of the equipped items.
+     *
+     * @param player
+     *          The player entity.
+     *
+     * @param model
+     *          The inventory model containing the inventory which contains the equipment.
+     */
+    public void refreshStatsLayer(final Player player, final InventoryModel model) {
+        this.removeComponent(statsLayer);
+        statsLayer = createStatsLayer(player, model);
+        this.addComponent(statsLayer);
     }
 }

@@ -29,7 +29,7 @@ public class InventoryController extends Controller<InventoryView, InventoryMode
 
         initializeEventHandlers(screen);
 
-        super.view.addModelComponents(model);
+        super.view.addModelComponents(gameController.getModel().getPlayer(), model);
     }
 
     @Override
@@ -40,9 +40,11 @@ public class InventoryController extends Controller<InventoryView, InventoryMode
 
         super.addToScreen(screen);
 
-        view.refreshEquipmentLayer(model);
-        view.refreshInventoryLayer(model);
-        view.refreshLootLayer(model);
+        view.refreshEquipmentLayer(gameController.getModel().getPlayer(), model);
+        view.refreshInventoryLayer(gameController.getModel().getPlayer(), model);
+        view.refreshLootLayer(gameController.getModel().getPlayer(), model);
+        view.refreshInspectionLayer(null);
+        view.refreshStatsLayer(gameController.getModel().getPlayer(), model);
     }
 
     /**
